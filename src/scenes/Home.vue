@@ -1,10 +1,8 @@
 <template>
   <main class="home">
 	  	<img :src="assetPath('Website', 'fond_accueil', 'jpg')" alt="Home page background">
-		<!-- <button @click="playerClicked()">Let's start !</button> -->
-		<!-- <button @click="enteringInfos = false">Go back</button> -->
 		<transition-group  name="fade">
-			<video @ended="loading = false" key="video" v-if="loading" autoplay :src="assetPath('Website', 'chargement', 'webm')" alt="Loading animation"></video>
+			<video @ended="loading = false" key="video" v-if="loading" autoplay :src="assetPath('Intro', 'Intro Astoria', 'mp4')" alt="Loading animation"></video>
 			<section key="home" class="home" v-else-if="!enteringInfos">
 
 				<nav>
@@ -61,7 +59,6 @@ export default {
 			enteringInfos: false,
 			currentUsername: "",
 			currentCountry: ""
-			// countryList: ["France"]
 		};
 	},
 	components: {
@@ -76,9 +73,6 @@ export default {
 		}
 	},
 	methods: {
-		playerClicked() {
-			this.$store.dispatch("changingScene", "Map");
-		},
 		selectCountry(item) {
 			this.currentCountry = item;
 		},
@@ -90,7 +84,7 @@ export default {
 					playerOrigin = element[0];
 			});
 			this.$store.dispatch("settingPlayerOrigin", playerOrigin);
-			this.$store.dispatch("changingScene", "Map");
+			this.$store.dispatch("changingScene", "Intro");
 		}
 	}
 };

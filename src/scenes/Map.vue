@@ -1,23 +1,29 @@
 <template>
   <div class="map">
-	  	<video v-show="show3D[0]" ref="planet1" preload autoplay muted loop :poster="assetPath('Map', 'Fond-univers')">
+	  <transition name="fade-button">
+	  	<video v-show="show3D[0]" @ended="$store.dispatch('changingScene', 1)" ref="planet1" preload :poster="assetPath('Map', 'Fond-univers')">
 			<source :src="assetPath('Map', 'Armes3D', 'webm')" type="video/webm">
 			<source :src="assetPath('Map', 'Armes3D', 'mp4')" type="video/mp4">
 		</video>
+		</transition>
+		<transition name="fade-button">
 		<video v-show="show3D.every(element => element === false)"  @click="moveRocket($event)" ref="background" preload autoplay muted loop :poster="assetPath('Map', 'Fond-univers')">
 			<source :src="assetPath('Map', 'Final', 'webm')" type="video/webm">
 			<source :src="assetPath('Map', 'Final', 'mp4')" type="video/mp4">
 		</video>
+		</transition>
 		<!-- <video class="rocket" ref="rocket" preload autoplay muted loop :poster="assetPath('Map', 'Fusée')">
 			<source :src="assetPath('Map', 'Fusée-flamme', 'webm')" type="video/webm">
 			<source :src="assetPath('Map', 'Fusée-flamme', 'mp4')" type="video/mp4">
 		</video> -->
 		<div v-for="(planet, index) in planets" :key="index" @click="landOn(index, $event)" :style="planet">
 		</div>
+		<transition name="fade-button">
 		<video v-if="landed" ref="fog" preload autoplay muted loop>
 			<source :src="assetPath('Map', 'Fusée-fumée', 'webm')" type="video/webm">
 			<source :src="assetPath('Map', 'Fusée-fumée', 'mp4')" type="video/mp4">
 		</video>
+		</transition>
 		<!-- <img :src="assetPath('Map', 'Fond-univers')" alt="Fond étoilé"/>
 		<img
 			v-for="n in 4"
@@ -27,7 +33,9 @@
 			class="planet"
 			alt="A planet."
 		/> -->
-		<img v-show="show3D.every(element => element === false)" :style="currentPosition" class="rocket" ref="rocket"  :class="currentLocation" :src="assetPath('Map', 'Fusée')" alt="Fusée"/>
+		<transition name="fade-button">
+		<img v-show="show3D.every(element => element === false)" :style="currentPosition" :class="currentLocation" class="rocket" ref="rocket" :src="assetPath('Map', 'Fusée')" alt="Fusée"/>
+		</transition>
   </div>
 </template>
 
@@ -69,7 +77,8 @@ export default {
 			currentPosition: {},
 			on: 0,
 			planets: [],
-			show3D: [false, false, false, false]
+			show3D: [false, false, false, false],
+			landOn1: false
 		};
 	},
 	computed: {
@@ -92,87 +101,69 @@ export default {
 		},
 		moveRocket(event) {
 			this.currentLocation = "moving";
-			console.log(event);
 			this.currentPosition = {
 				left: `${event.clientX - this.$refs.rocket.clientWidth / 2}px`,
 				top: `${event.clientY -
 					this.$refs.rocket.clientHeight * 3 / 4}px`
 			};
-			// setTimeout(() => {
-			// 	this.$store.dispatch("changingScene", 1);
-			// }, 750);
 		},
 		landOn(n, event) {
 			if (this.lastVisit < n)
 				return alert("You can't go to this planet yet !");
 			this.moveRocket(event);
+			// this.landOn1 = true;
 			setTimeout(() => {
 				this.show3D.splice(n, 1, true);
+				this.$refs[`planet${n + 1}`].play();
 				this.$nextTick().then(() => console.log(this.show3D[0]));
-			}, 1000);
-			setTimeout(() => {
-				this.$store.dispatch("changingScene", n + 1);
-			}, 3000);
+			}, 2500);
+			// setTimeout(() => {
+			// 	this.$store.dispatch("changingScene", n + 1);
+			// }, 4000);
 		},
 		updatePlanetsPosition() {
 			if (this.$refs.background === undefined) return;
-			let planeteRatios = [
+			let ratio = getObjectFitSize(
+				false,
+				this.$refs.background.clientWidth,
+				this.$refs.background.clientHeight,
+				1920,
+				1080
+			);
+			let planetsDims = [
 				{
-					width: 27.4,
-					height: 31.9,
-					inWidth: 27.3,
-					inHeight: 27.6,
-					planetX: 61.75,
-					planetY: 15
+					width: 530,
+					height: 328,
+					x: 206,
+					y: 523
 				},
 				{
-					width: 27.2,
-					height: 36.4,
-					inWidth: 25,
-					inHeight: 33.5,
-					planetX: 52.5,
-					planetY: 51
+					width: 487,
+					height: 363,
+					x: 443,
+					y: 73
 				},
 				{
-					width: 24.0,
-					height: 30.8,
-					inWidth: 23.2,
-					inHeight: 28.0,
-					planetX: 29,
-					planetY: 4
+					width: 477,
+					height: 314,
+					x: 899,
+					y: 602
 				},
 				{
-					width: 28.9,
-					height: 38.4,
-					inWidth: 29.8,
-					inHeight: 35.3,
-					planetX: 7,
-					planetY: 37.5
+					width: 626,
+					height: 374,
+					x: 1161,
+					y: 209
 				}
 			];
-			this.planets = planeteRatios
-				.map(element => {
-					let planetInfos = getObjectFitSize(
-						false,
-						this.$refs.background.clientWidth * element.width / 100,
-						this.$refs.background.clientHeight *
-							element.height /
-							100,
-						1920 * element.inWidth / 100,
-						1080 * element.inHeight / 100
-					);
-					planetInfos.planetX = element.planetX;
-					planetInfos.planetY = element.planetY;
-					return planetInfos;
-				})
-				.map(element => {
-					return {
-						width: `${element.width}px`,
-						height: `${element.height}px`,
-						bottom: `calc( ${element.planetY}% + ${element.y}px)`,
-						right: `calc(${element.planetX}% + ${element.x}px)`
-					};
-				});
+			this.planets = planetsDims.map(planet => {
+				return {
+					width: `${planet.width * ratio.width / 1920}px`,
+					height: `${planet.height * ratio.height / 1080}px`,
+					top: `${planet.y * ratio.height / 1080 + ratio.y}px`,
+					left: `${planet.x * ratio.width / 1920 + ratio.x}px`
+				};
+			});
 		}
 	},
 	mounted() {
@@ -247,7 +238,8 @@ export default {
 		width: 2.5vw;
 		object-fit: contain;
 		object-position: center;
-		transition: all 0.75s ease-out;
+		transition: top 1.5s ease-out, left 1.5s ease-out,
+			transform 1.5s ease-out;
 
 		&.start {
 			left: 5%;
@@ -256,10 +248,32 @@ export default {
 			transform: translate(0, -50%) rotate(90deg);
 		}
 
-		&.on1 {
-			top: 60%;
-			left: 25.5%;
-		}
+		// &.on1 {
+		// 	animation: landOn1 2s ease-out forwards;
+		// }
+		// animation: landOn1 2s ease-out forwards;
+		// @keyframes landOn1 {
+		// 	0% {
+		// 		left: 5%;
+		// 		top: 110%;
+		// 	}
+
+		// 	50% {
+		// 		left: 13.75%;
+		// 		top: 43.15%;
+		// 		transform: rotate(45deg);
+		// 	}
+		// 	75% {
+		// 		left: 31.2%;
+		// 		top: 22.4%;
+		// 		transform: rotate(0);
+		// 	}
+		// 	100% {
+		// 		left: 31.2%;
+		// 		top: 24.9%;
+		// 		transform: rotate(0);
+		// 	}
+		// }
 
 		&.on2 {
 			top: 14%;

@@ -4,6 +4,7 @@
 		:background="'planete1'"
 		:firstAnim="'Armes1'"
 		:secondAnim="'Armes2'"
+		:articleBackground="'WIPONIA-FOND'"
 		:character="'FirstCharacter'"
 		:plot="firstPlanetPlot"
 		@playerAnswered="saveAnswer"

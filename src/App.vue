@@ -4,9 +4,13 @@
 			<a @click="currentScene = 'Home'">Home</a> |
 			<a @click="currentScene = 'About'">About</a>
 		</div> -->
-		<component
-			:is="currentScene"
-		></component>
+		<transition name="fade-trans">
+			<component
+				:is="currentScene"
+			></component>
+		</transition>
+
+
 	</div>
 </template>
 <script>
@@ -26,6 +30,7 @@
 
 import Home from "@/scenes/Home";
 import About from "@/scenes/About";
+import Intro from "@/scenes/Intro";
 import Map from "@/scenes/Map";
 import FirstPlanet from "./scenes/FirstPlanet.vue";
 import SecondPlanet from "./scenes/SecondPlanet.vue";
@@ -36,6 +41,7 @@ export default {
 	components: {
 		Home,
 		About,
+		Intro,
 		Map,
 		FirstPlanet,
 		SecondPlanet,
@@ -91,5 +97,16 @@ button {
 	cursor: pointer;
 	font: inherit;
 	color: inherit;
+}
+
+.fade-trans-enter-active {
+	transition: opacity 0.5s ease-out;
+}
+.fade-trans-enter {
+	opacity: 0;
+}
+.fade-trans-leave-active {
+	transition: opacity 0.5s ease-out;
+	opacity: 0;
 }
 </style>
