@@ -2,9 +2,14 @@
 
 	<planet
 		:background="'planete2'"
+		:backgroundMusic="'ASTORIA_PATRIMOINE_TrevorSomething_CloudOfThoughts_Loopable'"
+		:firstAnim="'Patrimoine1'"
+		:secondAnim="'Patrimoine2'"
+		:articleBackground="'Fond-patrimoine'"
 		:character="'SecondCharacter'"
 		:plot="secondPlanetPlot"
 		@playerAnswered="saveAnswer"
+		@playerLeft="$store.dispatch('updatingLastVisit', 2)"
 	></planet>
 
 

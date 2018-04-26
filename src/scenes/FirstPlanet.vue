@@ -2,6 +2,7 @@
 
 	<planet
 		:background="'planete1'"
+		:backgroundMusic="'ASTORIA_ARMES NON DEFINITIF Perturbator_FemmeFatale_Loopable'"
 		:firstAnim="'Armes1'"
 		:secondAnim="'Armes2'"
 		:articleBackground="'WIPONIA-FOND'"

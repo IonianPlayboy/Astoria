@@ -7,7 +7,11 @@ const state = {
 		thirdPlanet: [],
 		fourthPlanet: []
 	},
-	lastVisit: 0
+	lastVisit: 0,
+	currentPosition: {
+		left: "5%",
+		top: "110%"
+	}
 };
 const getters = {};
 const mutations = {
@@ -22,6 +26,9 @@ const mutations = {
 	},
 	updateLastVisit(state, lastVisit) {
 		state.lastVisit = lastVisit;
+	},
+	movingRocket(state, newPosition) {
+		state.currentPosition = newPosition;
 	}
 };
 const actions = {
@@ -36,6 +43,9 @@ const actions = {
 	},
 	updatingLastVisit({ commit }, lastVisit) {
 		commit("updateLastVisit", lastVisit);
+	},
+	movingRocket({ commit }, newPosition) {
+		commit("movingRocket", newPosition);
 	}
 };
 const modules = {};

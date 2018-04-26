@@ -21,7 +21,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		currentScene: "Home",
+		currentScene: "Map",
 		db: database.ref(),
 		countries: database.ref("countriesList"),
 		results: database.ref("resultsList")

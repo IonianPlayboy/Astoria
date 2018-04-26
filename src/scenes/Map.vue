@@ -1,16 +1,37 @@
 <template>
   <div class="map">
-	  <transition name="fade-button">
-	  	<video v-show="show3D[0]" @ended="$store.dispatch('changingScene', 1)" ref="planet1" preload :poster="assetPath('Map', 'Fond-univers')">
-			<source :src="assetPath('Map', 'Armes3D', 'webm')" type="video/webm">
-			<source :src="assetPath('Map', 'Armes3D', 'mp4')" type="video/mp4">
-		</video>
+	<audio autoplay loop>
+    	<source :src="assetPath('Sounds', 'ASTORIA_MAP_MassEffectTrilogy_ExtendedGalaxy_Loopable', 'wav')" type="audio/wav">
+ 	 </audio>
+	  	<transition name="fade-button">
+			<video v-show="show3D[0]" @ended="$store.dispatch('changingScene', 1)" ref="planet1" preload :poster="assetPath('Map', 'Fond-univers')">
+				<source :src="assetPath('Map', 'Armes3D', 'webm')" type="video/webm">
+				<source :src="assetPath('Map', 'Armes3D', 'mp4')" type="video/mp4">
+			</video>
 		</transition>
 		<transition name="fade-button">
-		<video v-show="show3D.every(element => element === false)"  @click="moveRocket($event)" ref="background" preload autoplay muted loop :poster="assetPath('Map', 'Fond-univers')">
-			<source :src="assetPath('Map', 'Final', 'webm')" type="video/webm">
-			<source :src="assetPath('Map', 'Final', 'mp4')" type="video/mp4">
-		</video>
+			<video v-show="show3D[1]" @ended="$store.dispatch('changingScene', 2)" ref="planet2" preload :poster="assetPath('Map', 'Fond-univers')">
+				<source :src="assetPath('Map', 'Patrimoine3D', 'webm')" type="video/webm">
+				<source :src="assetPath('Map', 'Patrimoine3D', 'mp4')" type="video/mp4">
+			</video>
+		</transition>
+		<transition name="fade-button">
+			<video v-show="show3D[2]" @ended="$store.dispatch('changingScene', 3)" ref="planet3" preload :poster="assetPath('Map', 'Fond-univers')">
+				<source :src="assetPath('Map', 'Robot3D', 'webm')" type="video/webm">
+				<source :src="assetPath('Map', 'Robot3D', 'mp4')" type="video/mp4">
+			</video>
+		</transition>
+		<transition name="fade-button">
+			<video v-show="show3D[3]" @ended="$store.dispatch('changingScene', 4)" ref="planet4" preload :poster="assetPath('Map', 'Fond-univers')">
+				<source :src="assetPath('Map', 'Animal3D', 'webm')" type="video/webm">
+				<source :src="assetPath('Map', 'Animal3D', 'mp4')" type="video/mp4">
+			</video>
+		</transition>
+		<transition name="fade-button">
+			<video v-show="show3D.every(element => element === false)"  @click="moveRocket($event)" @canplaythrough="loaded = true" ref="background" preload autoplay muted loop :poster="assetPath('Map', 'Fond-univers')">
+				<source :src="assetPath('Map', 'Final', 'webm')" type="video/webm">
+				<source :src="assetPath('Map', 'Final', 'mp4')" type="video/mp4">
+			</video>
 		</transition>
 		<!-- <video class="rocket" ref="rocket" preload autoplay muted loop :poster="assetPath('Map', 'Fusée')">
 			<source :src="assetPath('Map', 'Fusée-flamme', 'webm')" type="video/webm">
@@ -34,7 +55,7 @@
 			alt="A planet."
 		/> -->
 		<transition name="fade-button">
-		<img v-show="show3D.every(element => element === false)" :style="currentPosition" :class="currentLocation" class="rocket" ref="rocket" :src="assetPath('Map', 'Fusée')" alt="Fusée"/>
+		<img v-show="show3D.every(element => element === false) && loaded" :style="currentPosition" :class="currentLocation" class="rocket" ref="rocket" :src="assetPath('Map', 'Fusée')" alt="Fusée"/>
 		</transition>
   </div>
 </template>
@@ -72,54 +93,90 @@ export default {
 	name: "Map",
 	data() {
 		return {
-			currentLocation: "start",
+			currentLocation: { flying: false, parked: true, starting: true },
 			landed: false,
-			currentPosition: {},
 			on: 0,
 			planets: [],
 			show3D: [false, false, false, false],
-			landOn1: false
+			landOn1: false,
+			loaded: false
 		};
 	},
 	computed: {
 		lastVisit() {
 			return this.$store.state.player.lastVisit;
+		},
+		currentPosition() {
+			return this.$store.state.player.currentPosition;
 		}
 	},
-	mounted() {},
+	created() {
+		if (this.lastVisit === 0) return;
+		this.currentLocation.parked = true;
+		this.currentLocation.flying = false;
+	},
 	methods: {
-		goToPlanet(n) {
-			console.log(`Planet ${n} was clicked !`);
-			this.currentLocation = `on${n}`;
-			this.$nextTick().then(() =>
-				setTimeout(() => {
-					console.log(`landed on Planet ${n} !`);
-					// console.log(Number.isInteger(n));
-					this.$store.dispatch("changingScene", n);
-				}, 750)
-			);
-		},
+		// goToPlanet(n) {
+		// 	console.log(`Planet ${n} was clicked !`);
+		// 	this.currentLocation = `on${n}`;
+		// 	this.$nextTick().then(() =>
+		// 		setTimeout(() => {
+		// 			console.log(`landed on Planet ${n} !`);
+		// 			// console.log(Number.isInteger(n));
+		// 			this.$store.dispatch("changingScene", n);
+		// 		}, 750)
+		// 	);
+		// },
 		moveRocket(event) {
-			this.currentLocation = "moving";
-			this.currentPosition = {
-				left: `${event.clientX - this.$refs.rocket.clientWidth / 2}px`,
-				top: `${event.clientY -
-					this.$refs.rocket.clientHeight * 3 / 4}px`
+			// this.currentLocation.parked = false;
+			// this.currentLocation.flying = true;
+			// let currentPosition = {
+			// 	left: `${event.clientX - this.$refs.rocket.clientWidth / 2}px`,
+			// 	top: `${event.clientY -
+			// 		this.$refs.rocket.clientHeight * 3 / 4}px`
+			// };
+			let endPosition = {
+				left: event.clientX - this.$refs.rocket.clientWidth / 2,
+				top: event.clientY - this.$refs.rocket.clientHeight * 3 / 4
 			};
+			switch (this.lastVisit) {
+				case 0:
+					let currentPosition = {
+						left: `${endPosition.left}px`,
+						top: `${endPosition.top - this.$refs.rocket.height}px`
+					};
+					this.$store.dispatch("movingRocket", currentPosition);
+					this.currentLocation.parked = false;
+					this.currentLocation.flying = true;
+					setTimeout(() => {
+						this.currentLocation.parked = true;
+						this.currentLocation.flying = false;
+
+						setTimeout(() => {
+							currentPosition = {
+								left: `${endPosition.left}px`,
+								top: `${endPosition.top}px`
+							};
+							this.$store.dispatch(
+								"movingRocket",
+								currentPosition
+							);
+						}, 1000);
+					}, 1250);
+					break;
+
+				default:
+					break;
+			}
 		},
 		landOn(n, event) {
 			if (this.lastVisit < n)
 				return alert("You can't go to this planet yet !");
 			this.moveRocket(event);
-			// this.landOn1 = true;
-			setTimeout(() => {
-				this.show3D.splice(n, 1, true);
-				this.$refs[`planet${n + 1}`].play();
-				this.$nextTick().then(() => console.log(this.show3D[0]));
-			}, 2500);
 			// setTimeout(() => {
-			// 	this.$store.dispatch("changingScene", n + 1);
-			// }, 4000);
+			// 	this.show3D.splice(n, 1, true);
+			// 	this.$refs[`planet${n + 1}`].play();
+			// }, 2500);
 		},
 		updatePlanetsPosition() {
 			if (this.$refs.background === undefined) return;
@@ -178,6 +235,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+video {
+	height: 100vh;
+	width: 100vw;
+	object-fit: cover;
+	object-position: center;
+	position: absolute;
+	left: 0;
+}
 .map {
 	height: 100%;
 	position: relative;
@@ -238,16 +303,15 @@ export default {
 		width: 2.5vw;
 		object-fit: contain;
 		object-position: center;
-		transition: top 1.5s ease-out, left 1.5s ease-out,
-			transform 1.5s ease-out;
+		transition: top 1.5s ease-out, left 1.5s ease-in,
+			transform 0.75s ease-out, opacity 0.05s ease-in;
 
-		&.start {
-			left: 5%;
-			top: 50%;
-			bottom: 50%;
-			transform: translate(0, -50%) rotate(90deg);
+		&.flying {
+			transform: rotate(50deg);
 		}
-
+		&.parked {
+			transform: rotate(0);
+		}
 		// &.on1 {
 		// 	animation: landOn1 2s ease-out forwards;
 		// }

@@ -2,7 +2,7 @@
   <main class="home">
 	  	<img :src="assetPath('Website', 'fond_accueil', 'jpg')" alt="Home page background">
 		<transition-group  name="fade">
-			<video @ended="loading = false" key="video" v-if="loading" autoplay :src="assetPath('Intro', 'Intro Astoria', 'mp4')" alt="Loading animation"></video>
+			<video @ended="loading = false" key="video" v-if="loading" autoplay :src="assetPath('Intro', 'Intro Astoria', 'mp4')" :poster="assetPath('Intro', 'Intro')" alt="Loading animation"></video>
 			<section key="home" class="home" v-else-if="!enteringInfos">
 
 				<nav>
