@@ -24,7 +24,7 @@ video:first-of-type {
 	height: 100vh;
 	width: 100vw;
 	object-fit: cover;
-	object-position: center top;
+	object-position: center bottom;
 	position: absolute;
 	left: 0;
 	top: 0;

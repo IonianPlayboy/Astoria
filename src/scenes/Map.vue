@@ -3,32 +3,32 @@
 	<audio autoplay loop>
     	<source :src="assetPath('Sounds', 'ASTORIA_MAP_MassEffectTrilogy_ExtendedGalaxy_Loopable', 'wav')" type="audio/wav">
  	 </audio>
-	  	<transition name="fade-button">
+	  	<transition name="fade-trans">
 			<video v-show="show3D[0]" @ended="$store.dispatch('changingScene', 1)" ref="planet1" preload :poster="assetPath('Map', 'Fond-univers')">
 				<source :src="assetPath('Map', 'Armes3D', 'webm')" type="video/webm">
 				<source :src="assetPath('Map', 'Armes3D', 'mp4')" type="video/mp4">
 			</video>
 		</transition>
-		<transition name="fade-button">
+		<transition name="fade-trans">
 			<video v-show="show3D[1]" @ended="$store.dispatch('changingScene', 2)" ref="planet2" preload :poster="assetPath('Map', 'Fond-univers')">
 				<source :src="assetPath('Map', 'Patrimoine3D', 'webm')" type="video/webm">
 				<source :src="assetPath('Map', 'Patrimoine3D', 'mp4')" type="video/mp4">
 			</video>
 		</transition>
-		<transition name="fade-button">
+		<transition name="fade-trans">
 			<video v-show="show3D[2]" @ended="$store.dispatch('changingScene', 3)" ref="planet3" preload :poster="assetPath('Map', 'Fond-univers')">
 				<source :src="assetPath('Map', 'Robot3D', 'webm')" type="video/webm">
 				<source :src="assetPath('Map', 'Robot3D', 'mp4')" type="video/mp4">
 			</video>
 		</transition>
-		<transition name="fade-button">
+		<transition name="fade-trans">
 			<video v-show="show3D[3]" @ended="$store.dispatch('changingScene', 4)" ref="planet4" preload :poster="assetPath('Map', 'Fond-univers')">
 				<source :src="assetPath('Map', 'Animal3D', 'webm')" type="video/webm">
 				<source :src="assetPath('Map', 'Animal3D', 'mp4')" type="video/mp4">
 			</video>
 		</transition>
-		<transition name="fade-button">
-			<video v-show="show3D.every(element => element === false)"  @click="moveRocket($event)" @canplaythrough="loaded = true" ref="background" preload autoplay muted loop :poster="assetPath('Map', 'Fond-univers')">
+		<transition name="fade-trans">
+			<video v-show="show3D.every(element => element === false)" @canplaythrough="loaded = true" ref="background" preload autoplay muted loop :poster="assetPath('Map', 'Fond-univers')">
 				<source :src="assetPath('Map', 'Final', 'webm')" type="video/webm">
 				<source :src="assetPath('Map', 'Final', 'mp4')" type="video/mp4">
 			</video>
@@ -54,8 +54,8 @@
 			class="planet"
 			alt="A planet."
 		/> -->
-		<transition name="fade-button">
-		<img v-show="show3D.every(element => element === false) && loaded" :style="currentPosition" :class="currentLocation" class="rocket" ref="rocket" :src="assetPath('Map', 'Fusée')" alt="Fusée"/>
+		<transition name="fade-trans">
+			<img v-show="DNotshowing && loaded" :style="currentPosition" :class="currentLocation" class="rocket" ref="rocket" :src="assetPath('Map', 'Fusée')" alt="Fusée"/>
 		</transition>
   </div>
 </template>
@@ -93,7 +93,13 @@ export default {
 	name: "Map",
 	data() {
 		return {
-			currentLocation: { flying: false, parked: true, starting: true },
+			currentLocation: {
+				flying: false,
+				parked: true,
+				starting: true,
+				rotating: false,
+				toSouth: false
+			},
 			landed: false,
 			on: 0,
 			planets: [],
@@ -108,6 +114,9 @@ export default {
 		},
 		currentPosition() {
 			return this.$store.state.player.currentPosition;
+		},
+		DNotshowing() {
+			return this.show3D.every(element => element === false);
 		}
 	},
 	created() {
@@ -139,9 +148,12 @@ export default {
 				left: event.clientX - this.$refs.rocket.clientWidth / 2,
 				top: event.clientY - this.$refs.rocket.clientHeight * 3 / 4
 			};
+			let currentPosition;
 			switch (this.lastVisit) {
 				case 0:
-					let currentPosition = {
+				case 1:
+				case 3:
+					currentPosition = {
 						left: `${endPosition.left}px`,
 						top: `${endPosition.top - this.$refs.rocket.height}px`
 					};
@@ -151,6 +163,7 @@ export default {
 					setTimeout(() => {
 						this.currentLocation.parked = true;
 						this.currentLocation.flying = false;
+						this.currentLocation.rotating = true;
 
 						setTimeout(() => {
 							currentPosition = {
@@ -161,8 +174,53 @@ export default {
 								"movingRocket",
 								currentPosition
 							);
-						}, 1000);
-					}, 1250);
+							this.currentLocation.rotating = false;
+						}, 750);
+					}, 1800);
+					break;
+				case 2:
+					currentPosition = {
+						left: `${this.currentPosition.left}`,
+						top: `${Number(
+							this.currentPosition.top.substring(
+								0,
+								this.currentPosition.top.length - 2
+							)
+						) - this.$refs.rocket.height}px`
+					};
+					this.$store.dispatch("movingRocket", currentPosition);
+					setTimeout(() => {
+						this.currentLocation.toSouth = true;
+						setTimeout(() => {
+							currentPosition = {
+								left: `${endPosition.left}px`,
+								top: `${endPosition.top -
+									this.$refs.rocket.height}px`
+							};
+							this.$store.dispatch(
+								"movingRocket",
+								currentPosition
+							);
+							this.currentLocation.parked = false;
+							setTimeout(() => {
+								this.currentLocation.parked = true;
+								this.currentLocation.toSouth = false;
+								this.currentLocation.rotating = true;
+
+								setTimeout(() => {
+									currentPosition = {
+										left: `${endPosition.left}px`,
+										top: `${endPosition.top}px`
+									};
+									this.$store.dispatch(
+										"movingRocket",
+										currentPosition
+									);
+									this.currentLocation.rotating = false;
+								}, 750);
+							}, 1800);
+						}, 750);
+					}, 1500);
 					break;
 
 				default:
@@ -173,10 +231,12 @@ export default {
 			if (this.lastVisit < n)
 				return alert("You can't go to this planet yet !");
 			this.moveRocket(event);
-			// setTimeout(() => {
-			// 	this.show3D.splice(n, 1, true);
-			// 	this.$refs[`planet${n + 1}`].play();
-			// }, 2500);
+			setTimeout(() => {
+				this.show3D.splice(n, 1, true);
+				this.$nextTick().then(() =>
+					this.$refs[`planet${n + 1}`].play()
+				);
+			}, n === 2 ? 7500 : 5000);
 		},
 		updatePlanetsPosition() {
 			if (this.$refs.background === undefined) return;
@@ -303,14 +363,22 @@ video {
 		width: 2.5vw;
 		object-fit: contain;
 		object-position: center;
-		transition: top 1.5s ease-out, left 1.5s ease-in,
-			transform 0.75s ease-out, opacity 0.05s ease-in;
+		transition: top 2s ease-out, left 2s ease-in, transform 0.75s ease-out;
+
+		&.rotating {
+			transition: top 2s ease-in-out, left 2s ease-in,
+				transform 0.4s ease-in-out;
+		}
 
 		&.flying {
 			transform: rotate(50deg);
 		}
 		&.parked {
 			transform: rotate(0);
+		}
+
+		&.toSouth {
+			transform: rotate(135deg);
 		}
 		// &.on1 {
 		// 	animation: landOn1 2s ease-out forwards;

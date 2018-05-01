@@ -9,7 +9,11 @@
 				:is="currentScene"
 			></component>
 		</transition>
-
+		<aside :class="{end: currentScene === 'End'}">
+			This website was made by students enrolled in the bachelor’s degree « Métiers du numérique » at Cergy-Pontoise University.
+			<br/>
+			Website host contact : 1&1 Internet SARL - 7, place de la Gare - BP 70109 - 57201 Sarreguemines Cedex /Tel : 0970 808 911
+		</aside>
 
 	</div>
 </template>
@@ -36,6 +40,7 @@ import FirstPlanet from "./scenes/FirstPlanet.vue";
 import SecondPlanet from "./scenes/SecondPlanet.vue";
 import ThirdPlanet from "./scenes/ThirdPlanet.vue";
 import FourthPlanet from "./scenes/FourthPlanet.vue";
+import End from "@/scenes/End";
 export default {
 	name: "app",
 	components: {
@@ -46,7 +51,8 @@ export default {
 		FirstPlanet,
 		SecondPlanet,
 		ThirdPlanet,
-		FourthPlanet
+		FourthPlanet,
+		End
 	},
 	// firebase: {
 	// 	countries: db.ref("countriesList")
@@ -61,7 +67,7 @@ export default {
 	// }
 };
 </script>
-<style>
+<style lang="scss">
 body {
 	margin: 0;
 	overflow: hidden;
@@ -76,6 +82,7 @@ body {
 	background-color: #222244;
 	height: 100vh;
 	width: 100vw;
+	position: relative;
 }
 
 #nav {
@@ -97,6 +104,24 @@ button {
 	cursor: pointer;
 	font: inherit;
 	color: inherit;
+}
+
+#app > aside {
+	position: absolute;
+	bottom: 1%;
+	font-size: 0.65vw;
+	color: rgba(white, 0.75);
+	font-family: Cantarell;
+	// margin: 0 auto;
+	display: inline-block;
+	left: 50%;
+	right: 50%;
+	transform: translate(-50%, 0);
+	width: 45%;
+
+	&.end {
+		left: 67.5%;
+	}
 }
 
 .fade-trans-enter-active {

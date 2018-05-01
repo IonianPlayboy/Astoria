@@ -29,8 +29,9 @@
 		"vue-template-compiler": "^2.5.13"
 	},
 	"browserslist": [
-		"> 1%",
 		"last 2 versions",
-		"not ie <= 11"
+		"not < 1%",
+		"not ie 11",
+		"not op_mini all"
 	]
 }
