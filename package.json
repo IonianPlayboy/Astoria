@@ -10,8 +10,8 @@
 		"e2e:open": "vue-cli-service e2e:open"
 	},
 	"dependencies": {
+		"axios": "^0.18.0",
 		"firebase": "^4.12.1",
-		"register-service-worker": "^1.0.0",
 		"vue": "^2.5.13",
 		"vuebar": "0.0.18",
 		"vuex": "^3.0.1"
@@ -30,7 +30,7 @@
 	},
 	"browserslist": [
 		"last 2 versions",
-		"not < 1%",
+		"> 1%",
 		"not ie 11",
 		"not op_mini all"
 	]

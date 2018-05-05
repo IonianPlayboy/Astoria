@@ -21,10 +21,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		currentScene: "Home",
-		db: database.ref(),
+		currentScene: "End",
 		countries: database.ref("countriesList"),
-		results: database.ref("resultsList")
+		results: database.ref("resultsList"),
+		showCredits: false
 	},
 	getters: {
 		countriesList(state) {
@@ -39,6 +39,13 @@ export default new Vuex.Store({
 	mutations: {
 		changeScene(state, newScene) {
 			state.currentScene = newScene;
+		},
+		setCountries(state, countriesList) {
+			console.log(countriesList);
+			state.countries = countriesList;
+		},
+		toggleCredits(state, shouldShow) {
+			state.showCredits = shouldShow;
 		}
 	},
 	actions: {
@@ -53,6 +60,9 @@ export default new Vuex.Store({
 				];
 				commit("changeScene", planetList[newScene - 1]);
 			}
+		},
+		settingCountries({ commit }, countriesList) {
+			commit("setCountries", countriesList);
 		}
 	},
 	modules: {

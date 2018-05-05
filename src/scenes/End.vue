@@ -7,9 +7,24 @@
 			 <article :style="articleSize" class="creators">
 				<div v-bar>
 					<div>
-						<h3>How the game was made </h3>
+						<h2>How the game was made </h2>
 						<p>
-							Though Astoria looks like a simple interactive game, it really is a web documentary addressing the clash of cultures. It was made by a group of students enrolled in the Bachelor’s degree of “Métiers du Numérique” at the University of Cergy-Pontoise. We looked into the cultural differences and how people react to someone having a different cultural lifestyle. In this web documentary, each item was designed to challenge your open-mindedness with cultural diversity. The name “Astoria” is the addition of the letter “A”, that comes from the word “asteroid”,  to the word “Storia”. Asteroids are minor planets no bigger than a hundred kilometers in length which you can find in the web documentary. “Storia” means “History” in Italian, and a few other languages like Corsican or Latin. The name was chosen to reflect the journey which the player will undertake through this universe. A journey full of twists and turns that the player needs to overcome to reach the end goal. We also bring forward how cultures transform with time, the succession of events that affect the evolution of a group of individuals. Through the medium of an interactive video game, the player lives the struggle as well as being entertained. The player will take on the role of Ulysses, named after the great hero of the Greek epic poet Homer. The character is an hybrid who embodies the mix of cultures of planet Earth. He follows a quest to find a new adoptive home where he can live in peace after the annihilation of his own world. The player will be drawn into various original worlds with vibrant colours and futuristic undertones which more or less remind us of our own reality. Each world is centered around a controversial point up to debate in our current society. The player will have to answer spontaneously to a couple of questions with the constraint of time. If the player takes too long to answer, then the game will start again. During this limited time, the player is confronted to individual thoughts built from own experiences, but also to the collective mind coming from the player’s own environment. What will prevail? The player’s individual thoughts or the collective mind? Any choice made is accounted for in the game’s database. At the end of the game, the player will be able to see the outcome of the choices made, the results will be displayed in the form of poll answers gathered from previous players’ games of various nationalities. The deal is that there is no good or bad answer as any opinion is viable through the scope of any culture. To come up with the poll results, we have collected opinions from different cultures based on news articles from worldwide press.
+							Though Astoria looks like a simple interactive game, it really is a web documentary addressing the clash of cultures. It was made by a group of students enrolled in the Bachelor’s degree of “Métiers du Numérique” at the University of Cergy-Pontoise. We looked into the cultural differences and how people react to someone having a different cultural lifestyle. In this web documentary, each item was designed to challenge your open-mindedness with cultural diversity.
+						</p>
+						<p>
+							The name “Astoria” is the addition of the letter “A”, that comes from the word “asteroid”,  to the word “Storia”. Asteroids are minor planets no bigger than a hundred kilometers in length which you can find in the web documentary. “Storia” means “History” in Italian, and a few other languages like Corsican or Latin. The name was chosen to reflect the journey which the player will undertake through this universe. A journey full of twists and turns that the player needs to overcome to reach the end goal. We also bring forward how cultures transform with time, the succession of events that affect the evolution of a group of individuals. Through the medium of an interactive video game, the player lives the struggle as well as being entertained.
+						</p>
+						<p>
+							The player will take on the role of Ulysse, named after the great hero of the Greek epic poet Homer. The character is an hybrid who embodies the mix of cultures of planet Earth. He follows a quest to find a new adoptive home where he can live in peace after the annihilation of his own world. The player will be drawn into various original worlds with vibrant colours and futuristic undertones which more or less remind us of our own reality.
+						</p>
+						<p>
+							Each world is centered around a controversial point up to debate in our current society. The player will have to answer spontaneously to a couple of questions with the constraint of time. If the player takes too long to answer, then the game will start again. During this limited time, the player is confronted to individual thoughts built from own experiences, but also to the collective mind coming from the player’s own environment. What will prevail? The player’s individual thoughts or the collective mind?
+						</p>
+						<p>
+							Any choice made is accounted for in the game’s database. At the end of the game, the player will be able to see the outcome of the choices made, the results will be displayed in the form of poll answers gathered from previous players’ games of various nationalities. The deal is that there is no good or bad answer as any opinion is viable through the scope of any culture. To come up with the poll results, we have collected opinions from different cultures based on news articles from worldwide press.
+						</p>
+						<p>
+							<strong>Are we only a reflection of our culture? Through our conclusion we demonstrate that it’s not an obligation to choose only one planet at the end of the game. We make the choice to associate a piece of these different universes to create a new form of culture. Indeed, we explain that we have a cultural identity but also a personal one that allows us to free ourselves from our social group. A culture alone doesn’t make man since we now have an opening throughout the world particularly by travel, media and art. By our exchanges, we are moving more and more towards a common culture, also engendered by globalization: threat or opportunity?</strong>
 						</p>
 					</div>
 					<div class="dragger-back"></div>
@@ -98,10 +113,10 @@
 							We would like to thank profusely the following people who helped us on this project :
 							<ul>
 								<li>Noemie’s father : 3D</li>
-								<li>Lauren/Maelle/hakim/Cyrielle : Planet 3D modelling</li>
+								<li>Lauren/Maelle/Cyrielle : Planet 3D modelling</li>
 								<li>Anthony Blanc-Nguyen: Translations</li>
-								<li>Alex Lafeuille/ David Sabatier: Web development</li>
-								<li>Luc Marcenac/Nicolas Priniotakis/ Brigitte Skiavi : Advice and support concerning our webdoc.</li>
+								<li>Alex Lafeuille/David Sabatier: Web development</li>
+								<li>Luc Marcenac/Nicolas Priniotakis/Brigitte Skiavi : Advice and support concerning our webdoc.</li>
 							</ul>
 						</p>
 					</div>
@@ -245,6 +260,7 @@ export default {
 	mounted() {
 		this.updateSize();
 		window.addEventListener("resize", this.updateSize);
+		this.$store.commit("toggleCredits", true);
 	},
 	beforeDestroy() {
 		window.removeEventListener("resize", this.updateSize);
@@ -363,9 +379,9 @@ export default {
 								height: 56%;
 								width: 85%;
 								// border: 4px solid rgba(white, 0.4);
-								border: 4px solid rgba(23, 36, 59, 0.3);
+								border: 4px solid rgba(white, 0.2);
 								margin: auto;
-								background-color: rgba(white, 0.9);
+								background-color: rgba(#1a1a39, 0.9);
 
 								img {
 									height: 90%;
@@ -373,6 +389,7 @@ export default {
 									object-fit: contain;
 									object-position: center;
 									margin: auto;
+									opacity: 0.9;
 								}
 							}
 						}
@@ -422,6 +439,7 @@ export default {
 					color: rgba(white, 0.9);
 					font-weight: bold;
 					transition: background-color 0.25s ease-out;
+					font-size: 1.05vw;
 
 					&.active {
 						background-color: #9700c7;

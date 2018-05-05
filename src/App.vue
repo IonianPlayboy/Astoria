@@ -1,20 +1,17 @@
 <template>
 	<div id="app">
-		<!-- <div id="nav">
-			<a @click="currentScene = 'Home'">Home</a> |
-			<a @click="currentScene = 'About'">About</a>
-		</div> -->
 		<transition name="fade-trans">
 			<component
 				:is="currentScene"
 			></component>
 		</transition>
-		<aside :class="{end: currentScene === 'End'}">
-			This website was made by students enrolled in the bachelor’s degree « Métiers du numérique » at Cergy-Pontoise University.
-			<br/>
-			Website host contact : 1&1 Internet SARL - 7, place de la Gare - BP 70109 - 57201 Sarreguemines Cedex /Tel : 0970 808 911
-		</aside>
-
+		<transition name="fade-trans">
+			<aside :class="{end: currentScene === 'End'}" v-if="showCredits">
+				This website was made by students enrolled in the bachelor’s degree « Métiers du numérique » at Cergy-Pontoise University.
+				<br/>
+				Website host contact : 1&1 Internet SARL - 7, place de la Gare - BP 70109 - 57201 Sarreguemines Cedex /Tel : 0970 808 911
+			</aside>
+		</transition>
 	</div>
 </template>
 <script>
@@ -31,7 +28,7 @@
 
 // let app = Firebase.initializeApp(config);
 // let db = app.database();
-
+import axios from "axios";
 import Home from "@/scenes/Home";
 import About from "@/scenes/About";
 import Intro from "@/scenes/Intro";
@@ -57,14 +54,32 @@ export default {
 	// firebase: {
 	// 	countries: db.ref("countriesList")
 	// },
+	data() {
+		return {
+			oui: {}
+		};
+	},
 	computed: {
 		currentScene() {
 			return this.$store.state.currentScene;
+		},
+		showCredits() {
+			return this.$store.state.showCredits;
 		}
+	},
+	created() {
+		// this.$store.dispatch("gettingCountries");
+		axios
+			.get("https://astoria-webdoc.firebaseio.com/countriesList.json")
+			.then(res => {
+				let data = res.data;
+				console.log(data);
+				let oh = { ah: "oui" };
+				// this.$store.dispatch("settingCountries", oh);
+				this.oui = data;
+			})
+			.catch(err => console.log(err));
 	}
-	// created() {
-	// 	this.$store.dispatch("gettingCountries");
-	// }
 };
 </script>
 <style lang="scss">
@@ -108,8 +123,8 @@ button {
 
 #app > aside {
 	position: absolute;
-	bottom: 1%;
-	font-size: 0.65vw;
+	bottom: 1.5%;
+	font-size: 0.6vw;
 	color: rgba(white, 0.75);
 	font-family: Cantarell;
 	// margin: 0 auto;
@@ -118,6 +133,7 @@ button {
 	right: 50%;
 	transform: translate(-50%, 0);
 	width: 45%;
+	line-height: 1.25;
 
 	&.end {
 		left: 67.5%;

@@ -2,28 +2,14 @@
   <main class="home">
 	  	<img :src="assetPath('Website', 'fond_accueil', 'jpg')" alt="Home page background">
 		<transition-group  name="fade">
-			<video @ended="loading = false" key="video" v-if="loading" autoplay :src="assetPath('Intro', 'Intro Astoria', 'mp4')" :poster="assetPath('Intro', 'Intro')" alt="Loading animation"></video>
+			<video @ended="loadingEnded()" key="video" v-if="loading" autoplay :src="assetPath('Intro', 'Intro Astoria', 'mp4')" :poster="assetPath('Intro', 'Intro')" alt="Loading animation"></video>
 			<section key="home" class="home" v-else-if="!enteringInfos">
-
-				<nav>
-					<a class="createurs"> CREATORS </a>
-					<a class="aide"> GAME STORY </a>
-					<a class="university">UNIVERSITY</a>
-
-				</nav>
 				<div class="accueil">
 					<img class="logo" :src="assetPath('Website', 'AstoriaLogo4')" alt="Astoria Logo">
 					<button @click="enteringInfos = true" class="bouton1">START THE JOURNEY</button>
 				</div>
 			</section>
-			<section key="form" v-else>
-
-				<nav>
-					<a class="createurs"> CREATORS </a>
-					<a class="aide"> GAME STORY </a>
-					<a class="university">UNIVERSITY</a>
-
-				</nav>
+			<section key="form" v-else-if="showRules === false">
 				<div class="accueil">
 					<img class="logo" :src="assetPath('Website', 'AstoriaLogo4')" alt="Astoria Logo">
 					<form>
@@ -38,10 +24,28 @@
 					</tol-dropdown>
 					</form>
 					<transition name="fade-button">
-						<button @click="startAdventure()" class="next" v-if="currentUsername !== '' && currentCountry !== '' ">
+						<button @click="showRules = true" class="next" v-if="currentUsername !== '' && currentCountry !== '' ">
 							<img :src="assetPath('Website', 'bouton suivant')" alt="Next button">
 						</button>
 					</transition>
+				</div>
+			</section>
+			<section key="rules" class="rules" v-else>
+				<div class="accueil">
+					<img class="logo" :src="assetPath('Website', 'AstoriaLogo4')" alt="Astoria Logo">
+
+					<h2>RULES :</h2>
+					<p>
+						You are Ulysse, your planet has just died ! You’re crossing the galaxy in search of a new home. Each planet you’ll visit is authentic and have different cultural characteristics. Guards are posted at the entrance of each of them. Answer their questions with honesty in the allocated time to choose at the end, your favorite planet to live in.
+					</p>
+					<p>
+						Be careful, the clock is ticking!
+						<br/>
+						You only have a few seconds to answer their questions. If you don’t, you have to restart the game.
+					</p>
+					<button @click="startAdventure()" class="next" v-if="currentUsername !== '' && currentCountry !== '' ">
+						<img :src="assetPath('Website', 'bouton suivant')" alt="Next button">
+					</button>
 				</div>
 			</section>
 		</transition-group>
@@ -58,7 +62,8 @@ export default {
 			loading: true,
 			enteringInfos: false,
 			currentUsername: "",
-			currentCountry: ""
+			currentCountry: "",
+			showRules: false
 		};
 	},
 	components: {
@@ -84,7 +89,12 @@ export default {
 					playerOrigin = element[0];
 			});
 			this.$store.dispatch("settingPlayerOrigin", playerOrigin);
+			this.$store.commit("toggleCredits", false);
 			this.$store.dispatch("changingScene", "Intro");
+		},
+		loadingEnded() {
+			this.loading = false;
+			this.$store.commit("toggleCredits", true);
 		}
 	}
 };
@@ -240,6 +250,30 @@ form {
 			opacity: 0.75;
 		}
 	}
+}
+
+.rules {
+	.accueil {
+		height: 70%;
+	}
+	.logo {
+		margin-top: 0;
+		height: 30vh;
+		width: 27vw;
+	}
+	h2,
+	p {
+		position: relative;
+		bottom: 5%;
+	}
+	h2 {
+		margin: 0 0 1.5% 0;
+	}
+	p {
+		margin: 0.5% 0;
+	}
+	font-weight: bold;
+	color: #fefefe;
 }
 
 .dropdown {
