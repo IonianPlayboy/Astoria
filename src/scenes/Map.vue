@@ -125,25 +125,7 @@ export default {
 		this.currentLocation.flying = false;
 	},
 	methods: {
-		// goToPlanet(n) {
-		// 	console.log(`Planet ${n} was clicked !`);
-		// 	this.currentLocation = `on${n}`;
-		// 	this.$nextTick().then(() =>
-		// 		setTimeout(() => {
-		// 			console.log(`landed on Planet ${n} !`);
-		// 			// console.log(Number.isInteger(n));
-		// 			this.$store.dispatch("changingScene", n);
-		// 		}, 750)
-		// 	);
-		// },
 		moveRocket(event) {
-			// this.currentLocation.parked = false;
-			// this.currentLocation.flying = true;
-			// let currentPosition = {
-			// 	left: `${event.clientX - this.$refs.rocket.clientWidth / 2}px`,
-			// 	top: `${event.clientY -
-			// 		this.$refs.rocket.clientHeight * 3 / 4}px`
-			// };
 			let endPosition = {
 				left: event.clientX - this.$refs.rocket.clientWidth / 2,
 				top: event.clientY - this.$refs.rocket.clientHeight * 3 / 4
@@ -230,6 +212,8 @@ export default {
 		landOn(n, event) {
 			if (this.lastVisit < n)
 				return alert("You can't go to this planet yet !");
+			if (this.lastVisit > n)
+				return alert("You already went to this planet before");
 			this.moveRocket(event);
 			setTimeout(() => {
 				this.show3D.splice(n, 1, true);

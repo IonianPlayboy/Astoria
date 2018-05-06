@@ -61,7 +61,12 @@ const state = {
 			{
 				speaker: "guard",
 				text:
-					"We are also particularly attentive to the cultural legacy of our planet. That’s why our planet is considered the one to host the most exquisite monuments and with the most well preserved cultural and natural heritage."
+					"We are also particularly attentive to the cultural legacy of our planet."
+			},
+			{
+				speaker: "guard",
+				text:
+					"That’s why our planet is considered the one to host the most exquisite monuments and with the most well preserved cultural and natural heritage."
 			},
 			{
 				speaker: "player",
@@ -70,12 +75,22 @@ const state = {
 			{
 				speaker: "guard",
 				text:
-					"The country’s economy relies on the many travellers who come here to contemplate Mnimeyo. Unfortunately our planet is deteriorating year after year as a result of the flock of visitors who don’t respect our fragile lands."
+					"The country’s economy relies on the many travellers who come here to contemplate Mnimeyo."
 			},
 			{
 				speaker: "guard",
 				text:
-					"For example, our places of worship are being damaged and our heritage is being threatened due to the construction of new buildings to host the travellers. Furthermore, they take so many selfies in front of our memorials…"
+					"Unfortunately our planet is deteriorating year after year as a result of the flock of visitors who don’t respect our fragile lands."
+			},
+			{
+				speaker: "guard",
+				text:
+					"For example, our places of worship are being damaged and our heritage is being threatened due to the construction of new buildings to host the travellers."
+			},
+			{
+				speaker: "guard",
+				text:
+					"Furthermore, they take so many selfies in front of our memorials…"
 			},
 			{
 				speaker: "guard",
@@ -158,7 +173,11 @@ const state = {
 			{
 				speaker: "guard",
 				text:
-					"There are two types of players :  the oppressors and the oppressed. Each player is equipped with a spear to fight and must put down the opponent. The victory is always on the side of the oppressors."
+					"There are two types of players :  the oppressors and the oppressed. Each player is equipped with a spear to fight and must put down the opponent."
+			},
+			{
+				speaker: "guard",
+				text: "The victory is always on the side of the oppressors."
 			},
 			{
 				speaker: "player",
@@ -167,7 +186,12 @@ const state = {
 			{
 				speaker: "guard",
 				text:
-					"The winners are placed in captivity and have the right to live in absolute comfort and security. They represent the future of our civilisation and they will perpetuate our species in an ideal environment."
+					"The winners are placed in captivity and have the right to live in absolute comfort and security."
+			},
+			{
+				speaker: "guard",
+				text:
+					"They represent the future of our civilisation and they will perpetuate our species in an ideal environment."
 			},
 			{
 				speaker: "guard",

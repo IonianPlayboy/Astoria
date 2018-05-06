@@ -410,9 +410,9 @@ export default {
 			}
 
 			& > button {
-				width: 10%;
-				height: 10%;
-				margin: auto 0 0.25% auto;
+				width: 7.5%;
+				height: 7.5%;
+				margin: auto 0 0.75% auto;
 
 				img {
 					height: 100%;
@@ -536,9 +536,9 @@ export default {
 			}
 
 			& > button {
-				width: 10%;
-				height: 10%;
-				margin: auto 0 0.25% auto;
+				width: 7.5%;
+				height: 7.5%;
+				margin: auto 0 0.75% auto;
 
 				img {
 					height: 100%;
