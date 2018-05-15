@@ -2,6 +2,7 @@
 
 	<planet
 		:background="'planete2'"
+		:surveyDisp="'survey'"
 		:backgroundMusic="'ASTORIA_PATRIMOINE_TrevorSomething_CloudOfThoughts_Loopable'"
 		:firstAnim="'Patrimoine1'"
 		:secondAnim="'Patrimoine2'"

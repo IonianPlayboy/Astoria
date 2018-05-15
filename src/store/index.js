@@ -4,6 +4,7 @@ import { database } from "@/firebase.config";
 import countries from "./countries";
 import player from "./player";
 import plot from "./plot";
+import results from "./ResultsStore";
 
 Vue.use(Vuex);
 
@@ -34,6 +35,9 @@ export default new Vuex.Store({
 		},
 		countries(state) {
 			return state.countries.countriesList;
+		},
+		results() {
+			return state.results.results;
 		}
 	},
 	mutations: {

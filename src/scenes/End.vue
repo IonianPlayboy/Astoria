@@ -128,10 +128,13 @@
 			 </article>
 		</section>
 		<section v-else-if="currentlyShowing ==='survey'">
-			survey
-			 <button @click="currentlyShowing=''">
-					 <img :src="assetPath('End', 'close')"  alt="Closing button"/>
-				 </button>
+      <img ref="surveysTitle" :src="assetPath('End', 'BOUTON-SURVEY')"  alt="Surveys title"/>
+      <article :style="articleSize" class="surveys">
+        <component :is="surveyPage"></component>
+        <button @click="currentlyShowing=''">
+          <img :src="assetPath('End', 'close')"  alt="Closing button"/>
+        </button>
+      </article>
 		</section>
 	 	<section v-else-if="currentlyShowing ==='articles'">
 			 <img ref="articlesTitle" :src="assetPath('End', 'BOUTON-ARTICLES')"  alt="Articles title"/>
@@ -199,16 +202,22 @@ function getObjectFitSize(
 		y: (containerHeight - targetHeight) / 2
 	};
 }
+
+//articles import
 import Wiponia from "@/components/articles/planet1";
 import Mnimeyo from "@/components/articles/planet2";
 import Rōbaṭa from "@/components/articles/planet3";
 import Hayawan from "@/components/articles/planet4";
+
+//surveys import
+import Survey from "@/components/surveys/survey";
 export default {
 	name: "End",
 	data() {
 		return {
 			currentlyShowing: "",
 			currentArticle: "Wiponia",
+      surveyPage: "Survey",
 			buttonSize: {},
 			articleSize: {}
 		};
@@ -217,7 +226,8 @@ export default {
 		Wiponia,
 		Mnimeyo,
 		Rōbaṭa,
-		Hayawan
+		Hayawan,
+    Survey
 	},
 	computed: {},
 	methods: {
