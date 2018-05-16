@@ -56,11 +56,6 @@ export default {
 	// firebase: {
 	// 	countries: db.ref("countriesList")
 	// },
-	data() {
-		return {
-			oui: {}
-		};
-	},
 	computed: {
 		currentScene() {
 			return this.$store.state.currentScene;
@@ -76,23 +71,33 @@ export default {
 			.then(res => {
 				let data = res.data;
 				let places = [];
-				for(let p in data){
+				for (let p in data) {
 					places.push(p);
 				}
 				ResultsStore.methods.setPlaces(places);
 				let oh = { ah: "oui" };
 				// this.$store.dispatch("settingCountries", oh);
 				this.oui = data;
+				console.log(data);
+				this.$store.dispatch("settingCountries", data);
+			})
+			.catch(err => console.log(err));
+		axios
+			.get("https://astoria-webdoc.firebaseio.com/resultsList.json")
+			.then(res => {
+				let data = res.data;
+				console.log(data);
+				this.$store.dispatch("settingResults", data);
 			})
 			.catch(err => console.log(err));
 
-			axios
-				.get("https://astoria-webdoc.firebaseio.com/resultsList.json")
-				.then(res => {
-					let data = res.data;
-					ResultsStore.methods.setResults(data);
-				})
-				.catch(err => console.log(err));
+		axios
+			.get("https://astoria-webdoc.firebaseio.com/resultsList.json")
+			.then(res => {
+				let data = res.data;
+				ResultsStore.methods.setResults(data);
+			})
+			.catch(err => console.log(err));
 	}
 };
 </script>

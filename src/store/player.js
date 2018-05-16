@@ -1,5 +1,5 @@
 const state = {
-	name: "Ulysse",
+	name: "Ulysses",
 	from: "",
 	choices: {
 		firstPlanet: [],
