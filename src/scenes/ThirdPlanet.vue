@@ -1,6 +1,7 @@
 <template>
   <planet
 		:background="'planete3'"
+		:surveyDisp="'survey'"
 		:backgroundMusic="'ASTORIA_ROBOT_Lorn_Unraveled_Loopable'"
 		:firstAnim="'Robot1'"
 		:secondAnim="'Robot2'"

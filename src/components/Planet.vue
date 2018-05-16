@@ -13,11 +13,14 @@
 			<source :src="assetPath('Universes', secondAnim, 'webm')" type="video/webm">
 			<!-- <source :src="assetPath('Universes', secondAnim, 'mp4')" type="video/mp4"> -->
 		</video>
+    <transition name="fade-trans">
+			<img v-show="showResults" :src="assetPath('Surveys', getPlanetNum()+'/Fond')" alt="Background" style="{height:100%}">
+    </transition>
 		<transition name="fade-trans">
-			<video v-show="showArticles" preload autoplay muted loop :poster="assetPath('Map', 'Fond-univers')">
-			<source :src="assetPath('Universes', articleBackground, 'webm')" type="video/webm">
-			<source :src="assetPath('Universes', articleBackground, 'mp4')" type="video/mp4">
-		</video>
+      <video v-show="showArticles" preload autoplay muted loop :poster="assetPath('Map', 'Fond-univers')">
+  			<source :src="assetPath('Universes', articleBackground, 'webm')" type="video/webm">
+  			<source :src="assetPath('Universes', articleBackground, 'mp4')" type="video/mp4">
+	    </video>
 		</transition>
 		<transition v-if="gameOver" name="fade-trans">
 			<img  :src="assetPath('Universes', 'gameover')" alt="Game over. :c">
@@ -37,7 +40,7 @@
 				</span>
 			</article>
 		</transition>
-		<transition name="fade-trans" v-else-if="shouldShow && !showArticles">
+		<transition name="fade-trans" v-else-if="shouldShow && !showResults && !showArticles">
 			<article class="choice" :style="currentTextPos">
 			<strong>{{choices[currentChoice]}}</strong>
 			<button @click="playerHasAnswered('yes')"><img :src="assetPath('Universes', 'Yes')" alt="Yes button"></button>
@@ -48,7 +51,12 @@
 			</aside>
 		</article>
 		</transition>
-		<transition v-else-if="shouldShow && showArticles">
+    <transition v-else-if="shouldShow && showResults && !showArticles">
+      <article class="survey">
+        <component :is="surveyDisp" :isUniverse="true" :planet=getPlanetNum() @viewArticle="viewArticle"></component>
+      </article>
+    </transition>
+		<transition v-else-if="shouldShow && !showResults && showArticles">
 			<article class="article">
 				<component :is="background" :isUniverse="true" @quittingPlanet="quitPlanet"></component>
 			</article>
@@ -92,12 +100,13 @@ import planete1 from "@/components/articles/planet1";
 import planete2 from "@/components/articles/planet2";
 import planete3 from "@/components/articles/planet3";
 import planete4 from "@/components/articles/planet4";
+import survey from "@/components/surveys/survey";
 export default {
 	name: "Planet",
 	data() {
 		return {
 			charactersTalking: false,
-			dialogAvancement: -1,
+			dialogAvancement: -1, //-1
 			inProgress: [],
 			currentChoice: 0,
 			shouldShow: false,
@@ -107,14 +116,16 @@ export default {
 			timerRunning: false,
 			intervalID: 0,
 			gameOver: false,
-			showArticles: false
+			showArticles: false,
+      showResults: false
 		};
 	},
 	components: {
 		planete1,
 		planete2,
 		planete3,
-		planete4
+		planete4,
+    survey
 	},
 	watch: {
 		charactersTalking(newValue) {
@@ -146,6 +157,10 @@ export default {
 		}
 	},
 	methods: {
+    getPlanetNum() {
+      let st = this.$options.parent._name.replace(/[^\w\s]/gi, '');
+      return st && st[0].toLowerCase() + st.slice(1);
+    },
 		avanceDialog(isClick = false) {
 			if (this.currentText !== this.newText && isClick) return;
 			this.dialogAvancement++;
@@ -215,7 +230,7 @@ export default {
 		playerHasAnswered(answer) {
 			this.$emit("playerAnswered", answer);
 			this.stopTimer();
-			if (this.currentChoice === 1) this.showArticles = true;
+			if (this.currentChoice === 1) this.showResults = true;
 			else {
 				// this.$store.dispatch("changingScene", "Map");
 				this.currentChoice = 1;
@@ -252,6 +267,10 @@ export default {
 			clearInterval(this.intervalID);
 			if (playerLost) this.gameOver = true;
 		},
+    viewArticle(){
+      this.showResults = false;
+      this.showArticles = true;
+    },
 		quitPlanet() {
 			this.$emit("playerLeft");
 			if (this.background === "planete4")
@@ -279,6 +298,7 @@ export default {
 	},
 	props: [
 		"background",
+    "surveyDisp",
 		"backgroundMusic",
 		"firstAnim",
 		"secondAnim",
@@ -443,6 +463,16 @@ export default {
 			}
 		}
 	}
+
+  .survey {
+    position: relative;
+    cursor: initial;
+    height: 100%;
+    width: 95%;
+    // color: #7b328c;
+    color: rgba(225, 225, 225, 0.95);
+    margin: auto 0 auto auto;
+  }
 
 	.article {
 		position: relative;
