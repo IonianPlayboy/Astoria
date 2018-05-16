@@ -22,18 +22,16 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
 		currentScene: "Home",
-		countries: database.ref("countriesList"),
-		results: database.ref("resultsList"),
+		countries: {},
+		results: {},
+		county: {},
 		showCredits: false
 	},
 	getters: {
 		countriesList(state) {
-			return Object.values(state.countries.countriesList)
+			return Object.values(state.countries)
 				.reduce((acc, curr) => acc.concat(curr), [])
 				.sort((a, b) => a.localeCompare(b));
-		},
-		countries(state) {
-			return state.countries.countriesList;
 		}
 	},
 	mutations: {
@@ -41,8 +39,10 @@ export default new Vuex.Store({
 			state.currentScene = newScene;
 		},
 		setCountries(state, countriesList) {
-			console.log(countriesList);
 			state.countries = countriesList;
+		},
+		setResults(state, resultsList) {
+			state.results = resultsList;
 		},
 		toggleCredits(state, shouldShow) {
 			state.showCredits = shouldShow;
@@ -63,6 +63,9 @@ export default new Vuex.Store({
 		},
 		settingCountries({ commit }, countriesList) {
 			commit("setCountries", countriesList);
+		},
+		settingResults({ commit }, resultsList) {
+			commit("setResults", resultsList);
 		}
 	},
 	modules: {

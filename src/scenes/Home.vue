@@ -36,7 +36,7 @@
 
 					<h2>RULES :</h2>
 					<p>
-						You are Ulysse, your planet has just died ! You’re crossing the galaxy in search of a new home. Each planet you’ll visit is authentic and have different cultural characteristics. Guards are posted at the entrance of each of them. Answer their questions with honesty in the allocated time to choose at the end, your favorite planet to live in.
+						You are Ulysses, your planet has just died ! You’re crossing the galaxy in search of a new home. Each planet you’ll visit is authentic and have different cultural characteristics. Guards are posted at the entrance of each of them. Answer their questions with honesty in the allocated time to choose at the end, your favorite planet to live in.
 					</p>
 					<p>
 						Be careful, the clock is ticking!
@@ -74,7 +74,7 @@ export default {
 			return this.$store.getters.countriesList;
 		},
 		countries() {
-			return this.$store.getters.countries;
+			return this.$store.state.countries;
 		}
 	},
 	methods: {

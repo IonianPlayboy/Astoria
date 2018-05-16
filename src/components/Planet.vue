@@ -130,7 +130,7 @@ export default {
 			return this.plot.dialog[this.dialogAvancement] === undefined
 				? ""
 				: this.plot.dialog[this.dialogAvancement].speaker === "player"
-					? "Ulysse"
+					? "Ulysses"
 					: "guard";
 		},
 		currentText() {
