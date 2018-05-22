@@ -255,8 +255,6 @@ export default {
 			this.planet,
 			this.question
 		);
-		console.log(this.result);
-		console.log(this.result[this.currentContinent]);
 		// this.playerName = this.$store.state.player.name;
 		this.updateRegionsPosition();
 		window.addEventListener("resize", this.updateRegionsPosition);

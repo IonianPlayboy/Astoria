@@ -32,11 +32,6 @@ export default new Vuex.Store({
 		},
 		resultsByRegion(state, getters) {
 			return getters.regionsList.map(region => {
-				console.log(
-					Object.values(state.results).filter(
-						result => result.from === region
-					)
-				);
 				return Object.values(state.results)
 					.filter(result => result.from === region)
 					.reduce((acc, result) => {
@@ -61,34 +56,20 @@ export default new Vuex.Store({
 											answers.choices[planet][1] === "yes"
 												? 1
 												: 0;
-										if (index < 10)
-											console.log(
-												region,
-												planet,
-												answers.choices[planet][0],
-												answers.choices[planet][1]
-											);
 										return total;
 									},
 									[0, 0]
 								);
-							console.log(acc[region][planet]);
-							console.log(Object.values(state.results)[1]);
 							let numberInRegion = Object.values(
 								state.results
 							).filter(result => result.from === region).length;
-							console.log(numberInRegion);
 							acc[region][planet] = acc[region][planet].map(
 								number => {
-									console.log(
-										`${number} * 100 / ${numberInRegion}`
-									);
 									return Math.round(
 										number * 100 / numberInRegion
 									);
 								}
 							);
-							console.log(acc[region][planet]);
 						});
 						return acc;
 					}, {});
