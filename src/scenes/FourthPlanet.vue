@@ -30,7 +30,7 @@ export default {
 		saveAnswer(answer) {
 			let choice = {
 				answer,
-				planet: "thirdPlanet"
+				planet: "fourthPlanet"
 			};
 			this.$store.dispatch("addingChoice", choice);
 		}
@@ -40,5 +40,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-
 </style>

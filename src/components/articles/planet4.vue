@@ -52,7 +52,7 @@
 			</div>
 			<div class="dragger-back"></div>
 		</div>
-		<button @click="quittingPlanet()" v-if="isUniverse">NEXT UNIVERSE <span>►</span></button>
+		<button @click="quittingPlanet()" v-if="isUniverse">NEXT <span>►</span></button>
 	</div>
 </template>
 
@@ -75,5 +75,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-
 </style>

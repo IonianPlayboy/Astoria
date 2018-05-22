@@ -9,12 +9,12 @@
 			<source :src="assetPath('Universes', firstAnim, 'webm')" type="video/webm">
 			<!-- <source :src="assetPath('Universes', firstAnim, 'mp4')" type="video/mp4"> -->
 		</video>
-		<video v-show="idle && !showArticles" ref="video2" preload autoplay loop muted :poster="assetPath('Universes', background, 'jpg')">
+		<video v-show="idle && !showArticles && !showResults" ref="video2" preload autoplay loop muted :poster="assetPath('Universes', background, 'jpg')">
 			<source :src="assetPath('Universes', secondAnim, 'webm')" type="video/webm">
 			<!-- <source :src="assetPath('Universes', secondAnim, 'mp4')" type="video/mp4"> -->
 		</video>
     <transition name="fade-trans">
-			<img v-show="showResults" :src="assetPath('Surveys', getPlanetNum()+'/Fond')" alt="Background" style="{height:100%}">
+			<img ref="results" class="results" v-show="showResults" :src="assetPath('Surveys', getPlanetNum()+'/Fond')" alt="Background">
     </transition>
 		<transition name="fade-trans">
       <video v-show="showArticles" preload autoplay muted loop :poster="assetPath('Map', 'Fond-univers')">
@@ -51,12 +51,12 @@
 			</aside>
 		</article>
 		</transition>
-    <transition v-else-if="shouldShow && showResults && !showArticles">
+    <transition name="fade-trans" v-else-if="shouldShow && showResults && !showArticles">
       <article class="survey">
-        <component :is="surveyDisp" :isUniverse="true" :planet=getPlanetNum() @viewArticle="viewArticle"></component>
+        <component :is="surveyDisp" :isUniverse="true" :results="results" :planet=getPlanetNum() @viewArticle="viewArticle"></component>
       </article>
     </transition>
-		<transition v-else-if="shouldShow && !showResults && showArticles">
+		<transition name="fade-trans" v-else-if="shouldShow && !showResults && showArticles">
 			<article class="article">
 				<component :is="background" :isUniverse="true" @quittingPlanet="quitPlanet"></component>
 			</article>
@@ -117,7 +117,8 @@ export default {
 			intervalID: 0,
 			gameOver: false,
 			showArticles: false,
-      showResults: false
+			showResults: false,
+			results: {}
 		};
 	},
 	components: {
@@ -125,7 +126,7 @@ export default {
 		planete2,
 		planete3,
 		planete4,
-    survey
+		survey
 	},
 	watch: {
 		charactersTalking(newValue) {
@@ -157,10 +158,10 @@ export default {
 		}
 	},
 	methods: {
-    getPlanetNum() {
-      let st = this.$options.parent._name.replace(/[^\w\s]/gi, '');
-      return st && st[0].toLowerCase() + st.slice(1);
-    },
+		getPlanetNum() {
+			let st = this.$options.parent._name.replace(/[^\w\s]/gi, "");
+			return st && st[0].toLowerCase() + st.slice(1);
+		},
 		avanceDialog(isClick = false) {
 			if (this.currentText !== this.newText && isClick) return;
 			this.dialogAvancement++;
@@ -238,6 +239,7 @@ export default {
 			}
 		},
 		updateTextPosition() {
+			this.results = this.$refs.results;
 			let currentVideo = this.idle ? "video2" : "video1";
 			if (this.$refs[currentVideo] === undefined) return;
 			let positionInfo = getObjectFitSize(
@@ -267,14 +269,14 @@ export default {
 			clearInterval(this.intervalID);
 			if (playerLost) this.gameOver = true;
 		},
-    viewArticle(){
-      this.showResults = false;
-      this.showArticles = true;
-    },
+		viewArticle() {
+			this.showResults = false;
+			this.showArticles = true;
+		},
 		quitPlanet() {
 			this.$emit("playerLeft");
 			if (this.background === "planete4")
-				return this.$store.dispatch("changingScene", "End");
+				return this.$store.dispatch("changingScene", "Conclusion");
 			this.$store.dispatch("changingScene", "Map");
 		},
 		initDialog() {
@@ -298,7 +300,7 @@ export default {
 	},
 	props: [
 		"background",
-    "surveyDisp",
+		"surveyDisp",
 		"backgroundMusic",
 		"firstAnim",
 		"secondAnim",
@@ -464,15 +466,15 @@ export default {
 		}
 	}
 
-  .survey {
-    position: relative;
-    cursor: initial;
-    height: 100%;
-    width: 95%;
-    // color: #7b328c;
-    color: rgba(225, 225, 225, 0.95);
-    margin: auto 0 auto auto;
-  }
+	.survey {
+		position: relative;
+		cursor: initial;
+		height: 100%;
+		width: 100%;
+		// color: #7b328c;
+		color: rgba(225, 225, 225, 0.95);
+		margin: auto 0 auto auto;
+	}
 
 	.article {
 		position: relative;
@@ -588,6 +590,10 @@ export default {
 
 	.guard {
 		color: #53affa;
+	}
+
+	.results {
+		object-position: center top !important;
 	}
 }
 </style>

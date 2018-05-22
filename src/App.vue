@@ -37,6 +37,7 @@ import FirstPlanet from "./scenes/FirstPlanet.vue";
 import SecondPlanet from "./scenes/SecondPlanet.vue";
 import ThirdPlanet from "./scenes/ThirdPlanet.vue";
 import FourthPlanet from "./scenes/FourthPlanet.vue";
+import Conclusion from "@/scenes/Conclusion";
 import End from "@/scenes/End";
 import ResultsStore from "./store/ResultsStore";
 
@@ -51,11 +52,9 @@ export default {
 		SecondPlanet,
 		ThirdPlanet,
 		FourthPlanet,
+		Conclusion,
 		End
 	},
-	// firebase: {
-	// 	countries: db.ref("countriesList")
-	// },
 	computed: {
 		currentScene() {
 			return this.$store.state.currentScene;
@@ -65,7 +64,6 @@ export default {
 		}
 	},
 	created() {
-		// this.$store.dispatch("gettingCountries");
 		axios
 			.get("https://astoria-webdoc.firebaseio.com/countriesList.json")
 			.then(res => {
@@ -75,10 +73,6 @@ export default {
 					places.push(p);
 				}
 				ResultsStore.methods.setPlaces(places);
-				let oh = { ah: "oui" };
-				// this.$store.dispatch("settingCountries", oh);
-				this.oui = data;
-				console.log(data);
 				this.$store.dispatch("settingCountries", data);
 			})
 			.catch(err => console.log(err));
@@ -98,6 +92,9 @@ export default {
 				ResultsStore.methods.setResults(data);
 			})
 			.catch(err => console.log(err));
+	},
+	mounted() {
+		document.querySelector("body").click();
 	}
 };
 </script>

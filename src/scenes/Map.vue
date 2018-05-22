@@ -1,6 +1,6 @@
 <template>
   <div class="map">
-	<audio autoplay loop>
+	<audio ref="audio" loop>
     	<source :src="assetPath('Sounds', 'ASTORIA_MAP_MassEffectTrilogy_ExtendedGalaxy_Loopable', 'wav')" type="audio/wav">
  	 </audio>
 	  	<transition name="fade-trans">
@@ -268,6 +268,7 @@ export default {
 		}
 	},
 	mounted() {
+		this.$refs.audio.play();
 		this.updatePlanetsPosition();
 		window.addEventListener("resize", this.updatePlanetsPosition);
 	},

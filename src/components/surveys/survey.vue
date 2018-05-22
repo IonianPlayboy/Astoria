@@ -1,57 +1,72 @@
 <template>
 	<div>
-    <div class="leftPart">
-  		<img :class="{'title': planet!= 'thirdPlanet', 'title3' : planet == 'thirdPlanet'}" :src="assetPath('Surveys', planet+'/Titre')" alt="Planet name" v-if="isUniverse">
-  		<img class="question" :src="assetPath('Surveys', planet+'/Question'+(question+1))" alt="Question" v-if="isUniverse">
-  		<img class="barH" :src="assetPath('Surveys', 'barreHorizontale')" v-if="isUniverse">
-      <input class="nextBtn" @click="nextQuestion()" v-if="isUniverse && question != 1" type="image" :src="assetPath('Surveys', nQuestion)" alt="Read the article" width="150" height="50">
-      <input class="nextBtn" @click="viewArticle()" v-if="isUniverse && question == 1" type="image" :src="assetPath('Surveys', 'Read the article')" alt="Read the article" width="150" height="50">
-    </div>
-    <div class="topRightPart">
-      <div id="nAmerica" @mouseover="changeText('NorthAmerica')">
-        {{datas['NorthAmerica']}}%</br>{{(100-datas['NorthAmerica'])}}%
-      </div>
-      <div id="sAmerica" v-on:mouseover="changeText('SouthAmerica')">
-        {{datas['SouthAmerica']}}%</br>{{(100-datas['SouthAmerica'])}}%
-      </div>
-      <div id="nAfrica" v-on:mouseover="changeText('NorthAfrica')">
-        {{datas['NorthAfrica']}}%</br>{{(100-datas['NorthAfrica'])}}%
-      </div>
-      <div id="ssAfrica" v-on:mouseover="changeText('SubSaharanAfrica')">
-        {{datas['SubSaharanAfrica']}}%</br>{{(100-datas['SubSaharanAfrica'])}}%
-      </div>
-      <div id="europe" v-on:mouseover="changeText('Europe')">
-        {{datas['Europe']}}%</br>{{(100-datas['Europe'])}}%
-      </div>
-      <div id="mEast" v-on:mouseover="changeText('MiddleEast')">
-        {{datas['MiddleEast']}}%</br>{{(100-datas['MiddleEast'])}}%
-      </div>
-      <div id="sAsia" v-on:mouseover="changeText('SouthAsia')">
-        {{datas['SouthAsia']}}%</br>{{(100-datas['SouthAsia'])}}%
-      </div>
-      <div id="nAsia" v-on:mouseover="changeText('NorthAsia')">
-        {{datas['NorthAsia']}}%</br>{{(100-datas['NorthAsia'])}}%
-      </div>
-      <div id="eAsia" v-on:mouseover="changeText('EastAsia')">
-        {{datas['EastAsia']}}%</br>{{(100-datas['EastAsia'])}}%
-      </div>
-      <div id="oceania" v-on:mouseover="changeText('Oceania')">
-        {{datas['Oceania']}}%</br>{{(100-datas['Oceania'])}}%
-      </div>
-    </div>
-    <div class="botRightPart">
-      <img class="barV" :src="assetPath('Surveys', 'barreVerticale')" v-if="isUniverse">
-      <div class= "desc">
-        <strong>{{playerName}}</strong>
-        <br/><br/>
-        In {{currentContinent}}, {{datas[currentContinent]}}% of the population would agree but {{(100-datas[currentContinent])}}% would not!
-      </div>
-    </div>
+		<div class="leftPart">
+			<img :class="{'title': planet !== 'thirdPlanet', 'title3' : planet === 'thirdPlanet'}" :src="assetPath('Surveys', planet+'/Titre')" alt="Planet name" v-if="isUniverse">
+			<img class="question" :src="assetPath('Surveys', planet+'/Question'+(question+1))" alt="Question" v-if="isUniverse">
+			<img class="barH" :src="assetPath('Surveys', 'barreHorizontale')" v-if="isUniverse">
+			<button class="nextBtn" @click="nextQuestion()" v-if="isUniverse && question !== 1">
+				<img :src="assetPath('Surveys', nQuestion)" alt="Read the article">
+			</button>
+			<button class="nextBtn" @click="viewArticle()" v-else-if="isUniverse && question === 1">
+				<img :src="assetPath('Surveys', 'Read the article')" alt="Read the article">
+			</button>
+		</div>
+		<transition  name="fading">
+			<div  v-if="imgLoaded" class="topRightPart">
+			<div  :id="region" v-for="(region, index) in regions" :key="region"  @mouseover="changeText(region)" :style="regionsPosition[index]">
+				{{result.find(res => Object.keys(res)[0] === region)[region][planet][question]}}%<br/>{{(100 - result.find(res => Object.keys(res)[0] === region)[region][planet][question])}}%
+			</div>
+		</div>
+		</transition>
+
+		<div class="botRightPart" v-if="isUniverse" :style="bottomPos">
+			<div class= "desc">
+				<h6><strong>{{playerName}}</strong></h6>
+				<p>
+					In {{currentContinent}}, {{result.find(res => Object.keys(res)[0] === currentContinent)[currentContinent][planet][question]}}% of the population would agree but {{(100 - result.find(res => Object.keys(res)[0] === currentContinent)[currentContinent][planet][question])}}% would not!
+				</p>
+			</div>
+   	 </div>
+		<transition name="fading">
+		<div v-if="!isUniverse && imgLoaded" class="questions">
+			<nav>
+				<button :class="{'active' : question === 0}" @click="question = 0">{{questions[0]}}</button>
+				<button :class="{'active' : question === 1}" @click="question = 1">{{questions[1]}}</button>
+			</nav>
+		</div>
+		</transition>
   </div>
 </template>
 
 <script>
+function getObjectFitSize(
+	contains /* true = contain, false = cover */,
+	containerWidth,
+	containerHeight,
+	width,
+	height
+) {
+	var doRatio = width / height;
+	var cRatio = containerWidth / containerHeight;
+	var targetWidth = 0;
+	var targetHeight = 0;
+	var test = contains ? doRatio > cRatio : doRatio < cRatio;
 
+	if (test) {
+		targetWidth = containerWidth;
+		targetHeight = targetWidth / doRatio;
+	} else {
+		targetHeight = containerHeight;
+		targetWidth = targetHeight * doRatio;
+	}
+
+	return {
+		width: targetWidth,
+		height: targetHeight,
+		x: (containerWidth - targetWidth) / 2,
+		y: (containerHeight - targetHeight) / 2
+	};
+}
 
 import ResultsStore from "../../store/ResultsStore";
 import PlayerStore from "../../store/player";
@@ -59,146 +74,293 @@ export default {
 	name: "survey",
 	data() {
 		return {
-      question: 0,
-      nQuestion: "NextQuestion",
-      playerName: "ULYSSE",
-      currentContinent: "Europe",
-      datas: {}
-    };
+			question: 0,
+			nQuestion: "NextQuestion",
+			playerName: "ULYSSE",
+			currentContinent: "Europe",
+			datas: {},
+			regionsPosition: [],
+			bottomPos: {},
+			imgLoaded: false
+		};
 	},
-	computed: {},
-	mounted : function() {
-    this.datas = ResultsStore.methods.getPlanetResults(this.planet,this.question);
-    this.playerName = this.$store.state.player.name;
-  },
+	computed: {
+		regions() {
+			return this.$store.getters.regionsList;
+		},
+		questions() {
+			return this.$store.state.plot[this.planet].choices;
+		},
+		result() {
+			return this.$store.getters.resultsByRegion;
+		}
+	},
+	watch: {
+		question(newValue) {
+			if (this.isUniverse) return;
+			this.datas = ResultsStore.methods.getPlanetResults(
+				this.planet,
+				this.question
+			);
+		},
+		planet(newValue) {
+			if (this.isUniverse) return;
+			this.datas = ResultsStore.methods.getPlanetResults(
+				this.planet,
+				this.question
+			);
+		}
+	},
 	methods: {
-    nextQuestion(){
-      this.question++;
-      this.nQuestion = "Read the article";
-      this.datas = ResultsStore.methods.getPlanetResults(this.planet,this.question);
-    },
+		nextQuestion() {
+			this.question++;
+			this.nQuestion = "Read the article";
+			this.datas = ResultsStore.methods.getPlanetResults(
+				this.planet,
+				this.question
+			);
+		},
 		viewArticle() {
 			this.$emit("viewArticle");
 		},
-    changeText(newContinent){
-      this.currentContinent = newContinent;
-    }
+		changeText(newContinent) {
+			this.currentContinent = newContinent;
+		},
+		updateRegionsPosition() {
+			if (this.results === undefined)
+				setTimeout(() => {
+					this.updateRegionsPosition();
+				}, 500);
+			else {
+				let ratio = getObjectFitSize(
+					!this.isUniverse,
+					this.results.clientWidth,
+					this.results.clientHeight,
+					this.isUniverse ? 1920 : 1304,
+					this.isUniverse ? 1080 : 695
+				);
+				let width = 55;
+				let height = 60;
+				let bottomPos = {
+					x: 1348,
+					y: 782
+				};
+				let regionsDims;
+				if (this.isUniverse) {
+					regionsDims = [
+						{
+							x: 1686,
+							y: 363
+						},
+						{
+							x: 1154,
+							y: 109
+						},
+						{
+							x: 1380,
+							y: 464
+						},
+						{
+							x: 1044,
+							y: 295
+						},
+						{
+							x: 721,
+							y: 455
+						},
+						{
+							x: 1590,
+							y: 70
+						},
+						{
+							x: 1763,
+							y: 474
+						},
+						{
+							x: 828,
+							y: 623
+						},
+						{
+							x: 1485,
+							y: 532
+						},
+						{
+							x: 1142,
+							y: 594
+						}
+					];
+				} else {
+					regionsDims = [
+						{
+							x: 1670,
+							y: 725
+						},
+						{
+							x: 880,
+							y: 325
+						},
+						{
+							x: 1210,
+							y: 875
+						},
+						{
+							x: 715,
+							y: 612
+						},
+						{
+							x: 235,
+							y: 865
+						},
+						{
+							x: 1522,
+							y: 267
+						},
+						{
+							x: 1780,
+							y: 895
+						},
+						{
+							x: 408,
+							y: 1127
+						},
+						{
+							x: 1365,
+							y: 985
+						},
+						{
+							x: 855,
+							y: 1080
+						}
+					];
+				}
+
+				this.regionsPosition = regionsDims.map(region => {
+					return {
+						// width: `${width * ratio.width / 1920}px`,
+						height: `${height * ratio.height / 1080}px`,
+						top: `${region.y * ratio.height / 1080 - 5}px`,
+						left: `${region.x * ratio.width / 1920 + ratio.x}px`
+					};
+				});
+				this.bottomPos = {
+					top: `${bottomPos.y * ratio.height / 1080 - 5}px`,
+					left: `${bottomPos.x * ratio.width / 1920 + ratio.x}px`
+				};
+				this.imgLoaded = true;
+			}
+		}
 	},
-	props:
-  ["isUniverse",
-  "planet"]
+	mounted() {
+		this.datas = ResultsStore.methods.getPlanetResults(
+			this.planet,
+			this.question
+		);
+		console.log(this.result);
+		console.log(this.result[this.currentContinent]);
+		// this.playerName = this.$store.state.player.name;
+		this.updateRegionsPosition();
+		window.addEventListener("resize", this.updateRegionsPosition);
+	},
+	beforeDestroy() {
+		window.removeEventListener("resize", this.updateRegionsPosition);
+	},
+	props: ["isUniverse", "results", "planet"]
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-
-.title{
-  position:absolute;
-  width:30%;
-  top: 35%;
+<style lang="scss">
+.title {
+	position: absolute;
+	width: 30%;
+	top: 35%;
+	object-fit: contain;
+	height: 10%;
 }
-.title3{
-  position:absolute;
-  width:30%;
-  width:25%;
-  top: 35%;
+.title3 {
+	position: absolute;
+	width: 30%;
+	width: 25%;
+	top: 35%;
 }
-.question{
-  position:absolute;
-  width:30%;
-  top: 48%;
+.question {
+	position: absolute;
+	width: 30%;
+	top: 48%;
+	object-fit: contain;
+	height: 4%;
 }
-.barH{
-  position:absolute;
-  width:10%;
-  top: 55%;
-}
-.nextBtn{
-  position:absolute;
-  width: 15%;
-  top: 60%;
-  z-index:1;
-}
-
-.topRightPart{
-    position:absolute;
-    width: 100%;
-    height: 100%;
-    left: 34.4%;
-    font-size:19px;
-    text-align: center;
-    z-index:1;
-}
-.topRightPart > #nAmerica{
-  position:absolute;
-  top: 41%;
-}
-.topRightPart > #sAmerica{
-  position:absolute;
-  top: 58%;
-  left:6.1%;
-}
-.topRightPart > #nAfrica{
-  position:absolute;
-  top: 25%;
-  left:17.7%;
-}
-.topRightPart > #ssAfrica{
-  position:absolute;
-  top: 55%;
-  left:23.1%;
-}
-.topRightPart > #europe{
-  position:absolute;
-  top: 6.3%;
-  left:23.7%;
-}
-.topRightPart > #mEast{
-  position:absolute;
-  top: 41.8%;
-  left:36.3%;
-}
-.topRightPart > #sAsia{
-  position:absolute;
-  top: 48.7%;
-  left:41.9%;
-}
-.topRightPart > #nAsia{
-  position:absolute;
-  top: 2.3%;
-  left:47.6%;
-}
-.topRightPart > #eAsia{
-  position:absolute;
-  top: 31.7%;
-  left:53.3%;
-}
-.topRightPart > #oceania{
-  position:absolute;
-  top: 42.8%;
-  left:57.5%;
+.barH {
+	position: absolute;
+	width: 10%;
+	top: 55%;
+	object-fit: contain;
+	height: 0.5%;
 }
 
-.botRightPart{
-    position:absolute;
-    top: 75%;
-    left: 68%;
-    width: 100%;
-    height: 100%;
-    z-index:0;
+.topRightPart {
+	width: 100%;
+	height: 100%;
+	font-size: 19px;
+	text-align: center;
+	z-index: 1;
+
+	div {
+		position: absolute;
+	}
 }
 
-.botRightPart > .barV{
-  position: relative;
-  float: left;
-  height: 10%;
-  width:0.2%;
+.botRightPart {
+	position: absolute;
+	bottom: 10%;
+	width: 25%;
+	z-index: 0;
+	right: 5%;
+	display: flex;
+	justify-content: space-around;
+	border-left: solid 3px white;
+	max-height: 11%;
 }
 
-.botRightPart > .desc{
-    height: %;
-    width:30%;
-    padding-left: 1%;
+.botRightPart > .barV {
+	position: relative;
+	height: 100%;
+	width: 0.7%;
+	object-fit: contain;
+	margin-top: auto;
+}
+
+.botRightPart > .desc {
+	width: 95%;
+	padding-left: 1%;
+}
+
+h6 {
+	font-size: inherit;
+	margin: 0;
+}
+
+.leftPart button {
+	z-index: 1;
+	position: absolute;
+	width: 15%;
+	top: 60%;
+	height: 6%;
+
+	img {
+		height: 100%;
+		width: 100%;
+		object-fit: contain;
+	}
+}
+.fading-enter-active {
+	transition: opacity 0.25s ease-out;
+}
+.fading-enter {
+	opacity: 0;
+}
+.fading-leave-active {
+	transition: opacity 0.25s ease-out;
+	opacity: 0;
 }
 </style>

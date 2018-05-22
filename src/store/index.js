@@ -8,18 +8,6 @@ import results from "./ResultsStore";
 
 Vue.use(Vuex);
 
-// let yolo;
-// function getCountries() {
-// 	yolo = database.ref("countriesList");
-// }
-
-// async function oui() {
-// 	await getCountries();
-// 	console.log(yolo);
-// }
-
-// oui();
-
 export default new Vuex.Store({
 	state: {
 		currentScene: "Home",
@@ -34,11 +22,77 @@ export default new Vuex.Store({
 				.reduce((acc, curr) => acc.concat(curr), [])
 				.sort((a, b) => a.localeCompare(b));
 		},
-		countries(state) {
-			return state.countries.countriesList;
+		regionsList(state) {
+			return Object.keys(state.countries).sort((a, b) =>
+				a.localeCompare(b)
+			);
 		},
-		results() {
-			return state.results.results;
+		results(state) {
+			return state.results;
+		},
+		resultsByRegion(state, getters) {
+			return getters.regionsList.map(region => {
+				console.log(
+					Object.values(state.results).filter(
+						result => result.from === region
+					)
+				);
+				return Object.values(state.results)
+					.filter(result => result.from === region)
+					.reduce((acc, result) => {
+						if (acc[region] === undefined) {
+							acc[region] = {
+								firstPlanet: 0,
+								fourthPlanet: 0,
+								secondPlanet: 0,
+								thirdPlanet: 0
+							};
+						}
+						Object.keys(acc[region]).map(planet => {
+							acc[region][planet] = Object.values(state.results)
+								.filter(result => result.from === region)
+								.reduce(
+									(total, answers, index) => {
+										total[0] +=
+											answers.choices[planet][0] === "yes"
+												? 1
+												: 0;
+										total[1] +=
+											answers.choices[planet][1] === "yes"
+												? 1
+												: 0;
+										if (index < 10)
+											console.log(
+												region,
+												planet,
+												answers.choices[planet][0],
+												answers.choices[planet][1]
+											);
+										return total;
+									},
+									[0, 0]
+								);
+							console.log(acc[region][planet]);
+							console.log(Object.values(state.results)[1]);
+							let numberInRegion = Object.values(
+								state.results
+							).filter(result => result.from === region).length;
+							console.log(numberInRegion);
+							acc[region][planet] = acc[region][planet].map(
+								number => {
+									console.log(
+										`${number} * 100 / ${numberInRegion}`
+									);
+									return Math.round(
+										number * 100 / numberInRegion
+									);
+								}
+							);
+							console.log(acc[region][planet]);
+						});
+						return acc;
+					}, {});
+			});
 		}
 	},
 	mutations: {

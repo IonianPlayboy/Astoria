@@ -116,6 +116,7 @@
 								<li>Lauren/Maelle/Cyrielle : Planet 3D modelling</li>
 								<li>Anthony Blanc-Nguyen: Translations</li>
 								<li>Alex Lafeuille/David Sabatier: Web development</li>
+								<li>Lucas Vauthier : Sound design</li>
 								<li>Luc Marcenac/Nicolas Priniotakis/Brigitte Skiavi : Advice and support concerning our webdoc.</li>
 							</ul>
 						</p>
@@ -128,13 +129,20 @@
 			 </article>
 		</section>
 		<section v-else-if="currentlyShowing ==='survey'">
-      <img ref="surveysTitle" :src="assetPath('End', 'BOUTON-SURVEY')"  alt="Surveys title"/>
-      <article :style="articleSize" class="surveys">
-        <component :is="surveyPage"></component>
-        <button @click="currentlyShowing=''">
-          <img :src="assetPath('End', 'close')"  alt="Closing button"/>
-        </button>
-      </article>
+      		<img ref="surveyTitle" :src="assetPath('End', 'BOUTON-SURVEY')"  alt="Surveys title"/>
+      		<article :style="articleSize" class="surveys">
+		 		<nav>
+					<button :class="{'active' : currentSurvey === 'firstPlanet'}" @click="currentSurvey='firstPlanet'">Wiponia</button>
+					<button :class="{'active' : currentSurvey === 'secondPlanet'}" @click="currentSurvey='secondPlanet'">Mnimeyo</button>
+					<button :class="{'active' : currentSurvey === 'thirdPlanet'}" @click="currentSurvey='thirdPlanet'">Rōbaṭa</button>
+					<button :class="{'active' : currentSurvey === 'fourthPlanet'}" @click="currentSurvey='fourthPlanet'">Hayawan</button>
+				</nav>
+				<img ref="results" class="results" :src="assetPath('End', `${currentSurvey}_map`)" alt="Background">
+       			<survey v-if="imgLoaded" :isUniverse="false" :results="results" :planet="currentSurvey" ></survey>
+        		<button @click="currentlyShowing=''">
+         			<img :src="assetPath('End', 'close')"  alt="Closing button"/>
+        		</button>
+      		</article>
 		</section>
 	 	<section v-else-if="currentlyShowing ==='articles'">
 			 <img ref="articlesTitle" :src="assetPath('End', 'BOUTON-ARTICLES')"  alt="Articles title"/>
@@ -217,9 +225,11 @@ export default {
 		return {
 			currentlyShowing: "",
 			currentArticle: "Wiponia",
-      surveyPage: "Survey",
+			currentSurvey: "firstPlanet",
 			buttonSize: {},
-			articleSize: {}
+			articleSize: {},
+			results: {},
+			imgLoaded: false
 		};
 	},
 	components: {
@@ -227,11 +237,12 @@ export default {
 		Mnimeyo,
 		Rōbaṭa,
 		Hayawan,
-    Survey
+		Survey
 	},
 	computed: {},
 	methods: {
 		updateSize() {
+			this.results = this.$refs.results;
 			if (this.currentlyShowing === "") {
 				let ratio = getObjectFitSize(
 					false,
@@ -266,7 +277,17 @@ export default {
 			this.$nextTick().then(() => this.updateSize());
 		}
 	},
-
+	created() {
+		let promise = new Promise(resolve => {
+			let img = new Image();
+			img.onload = () =>
+				resolve(this.assetPath("End", `${this.currentSurvey}_map`));
+			img.src = this.assetPath("End", `${this.currentSurvey}_map`);
+		});
+		promise.then(() => {
+			this.imgLoaded = true;
+		});
+	},
 	mounted() {
 		this.updateSize();
 		window.addEventListener("resize", this.updateSize);
@@ -423,6 +444,7 @@ export default {
 				width: 7.5%;
 				height: 7.5%;
 				margin: auto 0 0.75% auto;
+				z-index: 4;
 
 				img {
 					height: 100%;
@@ -556,6 +578,34 @@ export default {
 					object-fit: contain;
 					object-position: center;
 				}
+			}
+		}
+	}
+
+	.surveys {
+		// width: 90%;
+		> img {
+			height: 67.5%;
+			width: 100%;
+			object-fit: contain;
+		}
+
+		.topRightPart {
+			font-size: 11px;
+		}
+
+		.questions {
+			position: relative;
+			// bottom: 50%;
+
+			nav {
+				width: 87.5%;
+				margin: 0 auto;
+			}
+
+			button {
+				width: auto !important;
+				font-size: 0.95vw;
 			}
 		}
 	}
