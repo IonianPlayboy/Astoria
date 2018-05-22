@@ -149,11 +149,11 @@ export default {
 				if (this.isUniverse) {
 					regionsDims = [
 						{
-							x: 1686,
+							x: 1690,
 							y: 363
 						},
 						{
-							x: 1154,
+							x: 1155,
 							y: 109
 						},
 						{
@@ -173,11 +173,11 @@ export default {
 							y: 70
 						},
 						{
-							x: 1763,
+							x: 1765,
 							y: 474
 						},
 						{
-							x: 828,
+							x: 832,
 							y: 623
 						},
 						{
@@ -193,51 +193,53 @@ export default {
 					regionsDims = [
 						{
 							x: 1670,
-							y: 725
+							y: 730
 						},
 						{
 							x: 880,
-							y: 325
+							y: 335
 						},
 						{
 							x: 1210,
-							y: 875
+							y: 885
 						},
 						{
 							x: 715,
-							y: 612
+							y: 625
 						},
 						{
 							x: 235,
-							y: 865
+							y: 875
 						},
 						{
 							x: 1522,
-							y: 267
+							y: 273
 						},
 						{
 							x: 1780,
-							y: 895
+							y: 905
 						},
 						{
 							x: 408,
-							y: 1127
+							y: 1135
 						},
 						{
 							x: 1365,
-							y: 985
+							y: 995
 						},
 						{
 							x: 855,
-							y: 1080
+							y: 1090
 						}
 					];
 				}
-
+				let oui;
 				this.regionsPosition = regionsDims.map(region => {
 					return {
-						// width: `${width * ratio.width / 1920}px`,
-						height: `${height * ratio.height / 1080}px`,
+						width: this.isUniverse
+							? `${width * ratio.width / 1920}px`
+							: "auto",
+						// height: `${height * ratio.height / 1080}px`,
 						top: `${region.y * ratio.height / 1080 - 5}px`,
 						left: `${region.x * ratio.width / 1920 + ratio.x}px`
 					};
@@ -269,11 +271,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 .title {
-	position: absolute;
-	width: 30%;
-	top: 35%;
+	width: 100%;
 	object-fit: contain;
-	height: 10%;
+	height: 30%;
 }
 .title3 {
 	position: absolute;
@@ -282,18 +282,14 @@ export default {
 	top: 35%;
 }
 .question {
-	position: absolute;
-	width: 30%;
-	top: 48%;
+	width: 100%;
 	object-fit: contain;
-	height: 4%;
+	height: 15%;
 }
 .barH {
-	position: absolute;
-	width: 10%;
-	top: 55%;
+	width: 33%;
 	object-fit: contain;
-	height: 0.5%;
+	height: 3%;
 }
 
 .topRightPart {
@@ -338,17 +334,34 @@ h6 {
 	margin: 0;
 }
 
+.leftPart {
+	position: absolute;
+	width: 30%;
+	top: 35%;
+	display: flex;
+	flex-direction: column;
+	height: 30%;
+	justify-content: space-around;
+	align-items: flex-start;
+	margin-left: 2.5%;
+
+	> * {
+		object-position: left;
+	}
+}
+
 .leftPart button {
 	z-index: 1;
-	position: absolute;
-	width: 15%;
-	top: 60%;
-	height: 6%;
+	width: 50%;
+	height: 16%;
+	padding: 0;
+	margin: 0;
 
 	img {
 		height: 100%;
 		width: 100%;
 		object-fit: contain;
+		object-position: left;
 	}
 }
 .fading-enter-active {

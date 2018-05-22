@@ -64,9 +64,18 @@ export default new Vuex.Store({
 								state.results
 							).filter(result => result.from === region).length;
 							acc[region][planet] = acc[region][planet].map(
-								number => {
+								(number, index) => {
 									return Math.round(
-										number * 100 / numberInRegion
+										(number +
+											(state.player.from === region
+												? state.player.choices[planet][
+														index
+												  ] === "yes"
+													? 1
+													: 0
+												: 0)) *
+											100 /
+											numberInRegion
 									);
 								}
 							);

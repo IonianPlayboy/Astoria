@@ -1,6 +1,6 @@
 const state = {
 	name: "Ulysses",
-	from: "",
+	from: "Europe",
 	choices: {
 		firstPlanet: [],
 		secondPlanet: [],

@@ -591,7 +591,7 @@ export default {
 		}
 
 		.topRightPart {
-			font-size: 11px;
+			font-size: 10px;
 		}
 
 		.questions {
