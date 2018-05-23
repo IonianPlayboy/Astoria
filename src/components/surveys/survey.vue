@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="leftPart">
-			<img :class="{'title': planet !== 'thirdPlanet', 'title3' : planet === 'thirdPlanet'}" :src="assetPath('Surveys', planet+'/Titre')" alt="Planet name" v-if="isUniverse">
+			<img class="title" :src="assetPath('Surveys', planet+'/Titre')" alt="Planet name" v-if="isUniverse">
 			<img class="question" :src="assetPath('Surveys', planet+'/Question'+(question+1))" alt="Question" v-if="isUniverse">
 			<img class="barH" :src="assetPath('Surveys', 'barreHorizontale')" v-if="isUniverse">
 			<button class="nextBtn" @click="nextQuestion()" v-if="isUniverse && question !== 1">
@@ -68,7 +68,7 @@ function getObjectFitSize(
 	};
 }
 
-import ResultsStore from "../../store/ResultsStore";
+// import ResultsStore from "../../store/ResultsStore";
 import PlayerStore from "../../store/player";
 export default {
 	name: "survey",
@@ -95,30 +95,30 @@ export default {
 			return this.$store.getters.resultsByRegion;
 		}
 	},
-	watch: {
-		question(newValue) {
-			if (this.isUniverse) return;
-			this.datas = ResultsStore.methods.getPlanetResults(
-				this.planet,
-				this.question
-			);
-		},
-		planet(newValue) {
-			if (this.isUniverse) return;
-			this.datas = ResultsStore.methods.getPlanetResults(
-				this.planet,
-				this.question
-			);
-		}
-	},
+	// watch: {
+	// 	question(newValue) {
+	// 		if (this.isUniverse) return;
+	// 		this.datas = ResultsStore.methods.getPlanetResults(
+	// 			this.planet,
+	// 			this.question
+	// 		);
+	// 	},
+	// 	planet(newValue) {
+	// 		if (this.isUniverse) return;
+	// 		this.datas = ResultsStore.methods.getPlanetResults(
+	// 			this.planet,
+	// 			this.question
+	// 		);
+	// 	}
+	// },
 	methods: {
 		nextQuestion() {
 			this.question++;
 			this.nQuestion = "Read the article";
-			this.datas = ResultsStore.methods.getPlanetResults(
-				this.planet,
-				this.question
-			);
+			// this.datas = ResultsStore.methods.getPlanetResults(
+			// 	this.planet,
+			// 	this.question
+			// );
 		},
 		viewArticle() {
 			this.$emit("viewArticle");
@@ -154,11 +154,11 @@ export default {
 						},
 						{
 							x: 1155,
-							y: 109
+							y: 108
 						},
 						{
 							x: 1380,
-							y: 464
+							y: 463
 						},
 						{
 							x: 1044,
@@ -193,19 +193,19 @@ export default {
 					regionsDims = [
 						{
 							x: 1670,
-							y: 730
+							y: 732
 						},
 						{
-							x: 880,
-							y: 335
+							x: 885,
+							y: 337
 						},
 						{
 							x: 1210,
-							y: 885
+							y: 887
 						},
 						{
-							x: 715,
-							y: 625
+							x: 718,
+							y: 627
 						},
 						{
 							x: 235,
@@ -216,7 +216,7 @@ export default {
 							y: 273
 						},
 						{
-							x: 1780,
+							x: 1785,
 							y: 905
 						},
 						{
@@ -233,14 +233,13 @@ export default {
 						}
 					];
 				}
-				let oui;
 				this.regionsPosition = regionsDims.map(region => {
 					return {
 						width: this.isUniverse
 							? `${width * ratio.width / 1920}px`
 							: "auto",
 						// height: `${height * ratio.height / 1080}px`,
-						top: `${region.y * ratio.height / 1080 - 5}px`,
+						top: `${region.y * ratio.height / 1080 - 6}px`,
 						left: `${region.x * ratio.width / 1920 + ratio.x}px`
 					};
 				});
@@ -253,10 +252,10 @@ export default {
 		}
 	},
 	mounted() {
-		this.datas = ResultsStore.methods.getPlanetResults(
-			this.planet,
-			this.question
-		);
+		// this.datas = ResultsStore.methods.getPlanetResults(
+		// 	this.planet,
+		// 	this.question
+		// );
 		// this.playerName = this.$store.state.player.name;
 		this.updateRegionsPosition();
 		window.addEventListener("resize", this.updateRegionsPosition);
@@ -301,6 +300,7 @@ export default {
 
 	div {
 		position: absolute;
+		text-align: center;
 	}
 }
 

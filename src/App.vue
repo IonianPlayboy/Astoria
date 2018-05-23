@@ -80,7 +80,6 @@ export default {
 			.get("https://astoria-webdoc.firebaseio.com/resultsList.json")
 			.then(res => {
 				let data = res.data;
-				console.log(data);
 				this.$store.dispatch("settingResults", data);
 			})
 			.catch(err => console.log(err));

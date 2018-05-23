@@ -267,7 +267,13 @@ export default {
 		},
 		stopTimer(playerLost = false) {
 			clearInterval(this.intervalID);
-			if (playerLost) this.gameOver = true;
+			if (playerLost) {
+				this.gameOver = true;
+				setTimeout(() => {
+					this.$store.dispatch("updatingLastVisit", 0);
+					this.$store.dispatch("changingScene", "Map");
+				}, 5000);
+			}
 		},
 		viewArticle() {
 			this.showResults = false;

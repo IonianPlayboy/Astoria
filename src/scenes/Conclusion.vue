@@ -110,6 +110,9 @@ section.conclusion {
 		border-radius: 1vw;
 		padding: 1.5%;
 		position: relative;
+		display: flex;
+		justify-content: space-between;
+		width: 14%;
 	}
 	& > img:first-of-type {
 		height: 100vh;
