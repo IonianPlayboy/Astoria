@@ -521,3 +521,52 @@
      manifest: [] } } 
  Wed May 23 2018 02:14:51 GMT+0200 (Paris, Madrid (heure d’été))
 [debug] [2018-05-23T00:14:52.593Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-23T00:42:16.991Z] ----------------------------------------------------------------------
+[debug] [2018-05-23T00:42:16.995Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Alex Lafeuille\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase deploy --debug
+[debug] [2018-05-23T00:42:16.996Z] CLI Version:   3.18.5
+[debug] [2018-05-23T00:42:17.029Z] Platform:      win32
+[debug] [2018-05-23T00:42:17.029Z] Node Version:  v8.9.4
+[debug] [2018-05-23T00:42:17.031Z] Time:          Wed May 23 2018 02:42:17 GMT+0200 (Paris, Madrid (heure d’été))
+[debug] [2018-05-23T00:42:17.033Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-05-23T00:42:17.073Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-05-23T00:42:17.076Z] > authorizing via signed-in user
+[debug] [2018-05-23T00:42:17.080Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-05-23T00:42:17.094Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/_rp63rjD48_k-nC4CM9avzccIncjlQoFh_gGLvuQxBU',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Wed May 23 2018 02:42:17 GMT+0200 (Paris, Madrid (heure d’été))
+[debug] [2018-05-23T00:42:17.357Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-23T00:42:17.703Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/astoria-webdoc  
+  
+ Wed May 23 2018 02:42:17 GMT+0200 (Paris, Madrid (heure d’été))
+[debug] [2018-05-23T00:42:18.306Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-23T00:42:18.308Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/astoria-webdoc/tokens  
+  
+ Wed May 23 2018 02:42:18 GMT+0200 (Paris, Madrid (heure d’été))
+[debug] [2018-05-23T00:42:18.930Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'astoria-webdoc'...
+[info] 
+[info] i  deploying hosting
+[info] i  hosting: preparing dist directory for upload...
+[debug] [2018-05-23T00:42:40.389Z] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/astoria-webdoc/uploads/-LD9Ra7h15WVaGXtrGLK?fileCount=124&message=  
+  
+ Wed May 23 2018 02:42:40 GMT+0200 (Paris, Madrid (heure d’été))
+[debug] [2018-05-23T00:53:37.271Z] <<< HTTP RESPONSE 200
+[debug] [2018-05-23T00:53:37.306Z] [hosting] .tgz uploaded successfully, waiting for extraction
+[info] +  hosting: 124 files uploaded successfully
+[debug] [2018-05-23T00:53:37.906Z] [hosting] deploy completed after 678305ms
+[debug] [2018-05-23T00:53:37.911Z] >>> HTTP REQUEST POST https://deploy.firebase.com/v1/projects/astoria-webdoc/releases  
+ { hosting: 
+   { public: 'dist',
+     ignore: [ 'firebase.json', '**/.*', '**/node_modules/**' ],
+     rewrites: [ [Object] ],
+     version: '-LD9Ra7h15WVaGXtrGLK',
+     prefix: '-LD9Ra7h15WVaGXtrGLK/',
+     manifest: [] } } 
+ Wed May 23 2018 02:53:37 GMT+0200 (Paris, Madrid (heure d’été))
+[debug] [2018-05-23T00:53:39.170Z] <<< HTTP RESPONSE 200

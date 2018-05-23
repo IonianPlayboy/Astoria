@@ -159,8 +159,15 @@ export default {
 	},
 	methods: {
 		getPlanetNum() {
-			let st = this.$options.parent._name.replace(/[^\w\s]/gi, "");
-			return st && st[0].toLowerCase() + st.slice(1);
+			let equivalences = {
+				planete1: "firstPlanet",
+				planete2: "secondPlanet",
+				planete3: "thirdPlanet",
+				planete4: "fourthPlanet"
+			};
+			// let st = this.$options.parent._name.replace(/[^\w\s]/gi, "");
+			// return st && st[0].toLowerCase() + st.slice(1);
+			return equivalences[this.background];
 		},
 		avanceDialog(isClick = false) {
 			if (this.currentText !== this.newText && isClick) return;
