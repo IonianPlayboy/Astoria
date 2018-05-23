@@ -1,8 +1,12 @@
 <template>
   <main class="home">
 	  	<img :src="assetPath('Website', 'fond_accueil', 'jpg')" alt="Home page background">
+		  <audio ref="audio">
+    	<source ref="audio" autoplay :src="assetPath('Sounds', 'Intro-Astoria', 'mp3')" type="audio/mp3">
+ 	 </audio>
 		<transition-group  name="fade">
-			<video @ended="loadingEnded()" key="video" v-if="loading" autoplay :src="assetPath('Intro', 'Intro Astoria', 'mp4')" :poster="assetPath('Intro', 'Intro')" alt="Loading animation"></video>
+			<video @ended="loadingEnded()" key="video" v-if="loading" autoplay muted :src="assetPath('Intro', 'Intro Astoria', 'mp4')" :poster="assetPath('Intro', 'Intro')" alt="Loading animation"></video>
+
 			<section key="home" class="home" v-else-if="!enteringInfos">
 				<div class="accueil">
 					<img class="logo" :src="assetPath('Website', 'AstoriaLogo4')" alt="Astoria Logo">
@@ -96,6 +100,13 @@ export default {
 			this.loading = false;
 			this.$store.commit("toggleCredits", true);
 		}
+	},
+	mounted() {
+		// this.$refs.audio.currentTime = 1.65;
+		document.querySelector(".home").click();
+		this.$refs.audio.play();
+
+		// console.log(this.$refs.audio);
 	}
 };
 </script>
